@@ -1,3 +1,4 @@
+/* src/components/Home.css */
 .home-container {
   height: 100vh;
   width: 100vw;
@@ -11,6 +12,21 @@
   position: absolute;
   top: 0;
   left: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.home-container h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+}
+
+.home-container p {
+  font-size: 1.5rem;
+  color: #ddd;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); 
 }
 
 .button-group {
@@ -26,9 +42,11 @@
   padding: 12px 30px;
   font-size: 1.1rem;
   transition: background-color 0.3s, transform 0.3s;
+  border-radius: 30px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-custom:hover {
   background-color: #429346;
-  transform: scale(1.1); }
-  
+  transform: scale(1.1);
+}

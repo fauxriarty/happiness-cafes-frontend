@@ -33,7 +33,7 @@ const Registration = ({ onRegister }) => {
       alert('User registered successfully!');
       onRegister();
       console.log(response.data);
-      navigate('/');
+      navigate('/landing');
       sessionStorage.setItem("isLoggedIn", "true");
     } catch (error) {
       console.error('Error:', error);

@@ -1,9 +1,19 @@
+// src/components/Navigation.js
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import './Navigation.css';
 
 const Navigation = ({ isAuthenticated, onLogout }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    onLogout();
+    navigate('/'); // navigate to home page
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav className="navbar navbar-expand-lg">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">Home</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +33,9 @@ const Navigation = ({ isAuthenticated, onLogout }) => {
                   <Link className="nav-link" to="/terms">Terms and Conditions</Link>
                 </li>
                 <li className="nav-item">
-                  <button className="btn btn-secondary nav-link" onClick={onLogout}>Logout</button>
+                  <button className="btn btn-link nav-link logout-button" onClick={handleLogout}>
+                    <i className="fas fa-sign-out-alt"></i>
+                  </button>
                 </li>
               </>
             ) : (

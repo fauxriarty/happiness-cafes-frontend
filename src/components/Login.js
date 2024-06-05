@@ -25,7 +25,7 @@ const Login = ({ onLogin }) => {
       alert("Login successful!");
       onLogin();
       console.log(response.data);
-      navigate("/");
+      navigate("/landing");
       sessionStorage.setItem("isLoggedIn", "true");
     } catch (error) {
       console.error("Error:", error);
