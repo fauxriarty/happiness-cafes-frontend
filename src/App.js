@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Registration from './components/Registration';
 import Home from './components/Home';
@@ -10,32 +10,39 @@ import Profile from './components/Profile';
 import Terms from './components/Terms';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(sessionStorage.getItem("isLoggedIn") === "true");
 
-  // Load the authentication state from sessionStorage when the component mounts
   useEffect(() => {
-    const storedIsAuthenticated = sessionStorage.getItem('isAuthenticated');
-    setIsAuthenticated(storedIsAuthenticated === 'true');
+    setIsAuthenticated(sessionStorage.getItem("isLoggedIn") === "true");
   }, []);
 
   const handleLogin = () => {
     setIsAuthenticated(true);
-    sessionStorage.setItem('isAuthenticated', 'true'); // Store the authentication state in sessionStorage
+    sessionStorage.setItem("isLoggedIn", "true");
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    sessionStorage.removeItem("isLoggedIn");
   };
 
   return (
     <Router>
-      <Navigation isAuthenticated={isAuthenticated} />
-      <div className="container mt-3">
+      {isAuthenticated && <Navigation isAuthenticated={isAuthenticated} onLogout={handleLogout} />}
+      <div className={isAuthenticated ? "container mt-3" : ""}>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login onLogin={handleLogin} />} />
-          <Route path="/register" element={<Registration onRegister={handleLogin} />} />
-          {isAuthenticated && (
+          <Route path="/" element={<Home isAuthenticated={isAuthenticated} />} />
+          {!isAuthenticated ? (
+            <>
+              <Route path="/login" element={<Login onLogin={handleLogin} />} />
+              <Route path="/register" element={<Registration onRegister={handleLogin} />} />
+            </>
+          ) : (
             <>
               <Route path="/wishes" element={<Wishes />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/terms" element={<Terms />} />
+              <Route path="*" element={<Navigate to="/" />} />
             </>
           )}
         </Routes>

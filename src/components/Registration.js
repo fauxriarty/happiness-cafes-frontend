@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import {useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import './Form.css';
+import { FaArrowLeft } from 'react-icons/fa'; 
 
 const Registration = ({ onRegister }) => {
   const navigate = useNavigate();
-
+  
   const [user, setUser] = useState({
     name: '',
     email: '',
@@ -32,9 +33,8 @@ const Registration = ({ onRegister }) => {
       alert('User registered successfully!');
       onRegister();
       console.log(response.data);
-      navigate('/'); // navigate to home page
-      sessionStorage.setItem("isLoggedIn", "true"); // set value in localStorage
-
+      navigate('/');
+      sessionStorage.setItem("isLoggedIn", "true");
     } catch (error) {
       console.error('Error:', error);
       alert('Registration failed!');
@@ -42,83 +42,92 @@ const Registration = ({ onRegister }) => {
   };
 
   return (
-    <div>
-      <h2>Register User</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            name="name"
-            value={user.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email</label>
-          <input
-            type="email"
-            className="form-control"
-            id="email"
-            name="email"
-            value={user.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-control"
-            id="password"
-            name="password"
-            value={user.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="address" className="form-label">Address</label>
-          <input
-            type="text"
-            className="form-control"
-            id="address"
-            name="address"
-            value={user.address}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="phoneNumber" className="form-label">Phone Number</label>
-          <input
-            type="tel"
-            className="form-control"
-            id="phoneNumber"
-            name="phoneNumber"
-            value={user.phoneNumber}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
-          <input
-            type="date"
-            className="form-control"
-            id="dateOfBirth"
-            name="dateOfBirth"
-            value={user.dateOfBirth}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
-      </form>
+    <div className="form-container">
+      <button className="back-button" onClick={() => navigate('/')}>
+        <FaArrowLeft />
+      </button>
+      <div className="form-box">
+        <h2>New? Welcome to the Family!</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-row">
+            <div className="mb-3">
+              <label htmlFor="name" className="form-label">Name</label>
+              <input
+                type="text"
+                className="form-control"
+                id="name"
+                name="name"
+                value={user.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">Email</label>
+              <input
+                type="email"
+                className="form-control"
+                id="email"
+                name="email"
+                value={user.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">Password</label>
+              <input
+                type="password"
+                className="form-control"
+                id="password"
+                name="password"
+                value={user.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="phoneNumber" className="form-label">Phone Number</label>
+              <input
+                type="tel"
+                className="form-control"
+                id="phoneNumber"
+                name="phoneNumber"
+                value={user.phoneNumber}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="address" className="form-label">Address</label>
+            <input
+              type="text"
+              className="form-control"
+              id="address"
+              name="address"
+              value={user.address}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
+            <input
+              type="date"
+              className="form-control"
+              id="dateOfBirth"
+              name="dateOfBirth"
+              value={user.dateOfBirth}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">Submit</button>
+        </form>
+      </div>
     </div>
   );
 };

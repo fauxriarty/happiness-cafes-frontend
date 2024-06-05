@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Navigation = ({ isAuthenticated }) => {
+const Navigation = ({ isAuthenticated, onLogout }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-fluid">
@@ -10,7 +10,7 @@ const Navigation = ({ isAuthenticated }) => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
+          <ul className="navbar-nav ms-auto">
             {isAuthenticated ? (
               <>
                 <li className="nav-item">
@@ -21,6 +21,9 @@ const Navigation = ({ isAuthenticated }) => {
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/terms">Terms and Conditions</Link>
+                </li>
+                <li className="nav-item">
+                  <button className="btn btn-secondary nav-link" onClick={onLogout}>Logout</button>
                 </li>
               </>
             ) : (
