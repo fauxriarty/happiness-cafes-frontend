@@ -1,10 +1,11 @@
 import React from 'react';
+import '../CommonStyles.css';
 
 const Terms = () => {
   return (
-    <div>
-      <h2>Terms and Conditions</h2>
-      <p>Terms and conditions content will be displayed here.</p>
+    <div className="common-container">
+      <h1>Terms and Conditions</h1>
+      <p>Read the terms and conditions here.</p>
     </div>
   );
 };

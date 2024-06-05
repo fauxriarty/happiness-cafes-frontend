@@ -1,5 +1,5 @@
 .navbar {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background: linear-gradient(180deg, #1e3c72 0%, #216df0 100%);
 }
   
   .navbar-brand {
@@ -9,20 +9,21 @@
   
   .navbar-nav .nav-link {
     font-size: 1.2rem;
+    padding: 20px;
     color: white;
   }
   
-  .logout-button {
+  .logout-button i{
     display: flex;
     align-items: center;
     color: white;
+    font-size: 1.5rem;
+
     border: none;
     background: none;
     cursor: pointer;
-    padding: 12px;
+    padding: 3px;
   }
   
-  .logout-button i {
-    font-size: 1.5rem;
-  }
+
   

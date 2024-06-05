@@ -1,10 +1,11 @@
 import React from 'react';
+import '../CommonStyles.css';
 
 const Wishes = () => {
   return (
-    <div>
-      <h2>Wishes</h2>
-      <p>List of wishes will be displayed here.</p>
+    <div className="common-container">
+      <h1>Wishes</h1>
+      <p>View and manage your wishes here.</p>
     </div>
   );
 };

@@ -1,4 +1,3 @@
-// src/components/Navigation.js
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';

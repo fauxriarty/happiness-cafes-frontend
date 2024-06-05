@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
@@ -10,6 +9,7 @@ import Wishes from './components/Wishes';
 import Profile from './components/Profile';
 import Terms from './components/Terms';
 import LandingPage from './components/LandingPage';
+import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(sessionStorage.getItem("isLoggedIn") === "true");

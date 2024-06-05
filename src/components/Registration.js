@@ -47,7 +47,7 @@ const Registration = ({ onRegister }) => {
         <FaArrowLeft />
       </button>
       <div className="form-box">
-        <h2>New? Welcome to the Family!</h2>
+        <h2>New to the Family?</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-row">
             <div className="mb-3">

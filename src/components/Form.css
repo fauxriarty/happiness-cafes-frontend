@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background: linear-gradient(0deg, #1e3c72 0%, #216df0 100%);
     color: white;
     position: relative; 
   }
@@ -33,7 +33,7 @@
   
   .form-box h2 {
     color: #333333;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
   
   .form-box .form-label {
