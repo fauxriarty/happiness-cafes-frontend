@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import './Navigation.css';
+import '../CommonStyles.css';
 
 const Navigation = ({ isAuthenticated, onLogout }) => {
   const navigate = useNavigate();
+  const userId = sessionStorage.getItem("userId");
 
   const handleLogout = () => {
     onLogout();
@@ -26,7 +27,7 @@ const Navigation = ({ isAuthenticated, onLogout }) => {
                   <Link className="nav-link" to="/wishes">Wishes</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/profile">Profile</Link>
+                  <Link className="nav-link" to={`/profile/${userId}`}>Profile</Link>
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/terms">Terms and Conditions</Link>

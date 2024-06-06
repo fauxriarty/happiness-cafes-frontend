@@ -1,7 +1,10 @@
-.navbar {
-    background: linear-gradient(180deg, #1e3c72 0%, #216df0 100%);
-}
+
   
+.navbar {
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
   .navbar-brand {
     transition: transform 0.3s;
     font-size: 1.5rem;

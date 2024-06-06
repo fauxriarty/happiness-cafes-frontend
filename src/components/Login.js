@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import './Form.css';
-import { FaArrowLeft } from 'react-icons/fa'; 
+import { FaArrowLeft } from 'react-icons/fa';
 
 const Login = ({ onLogin }) => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
-    email: "",
+    phoneNumber: "",
     password: "",
   });
 
@@ -18,15 +18,13 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:8080/login",
-        credentials
-      );
+      const response = await axios.post("http://localhost:8080/login", credentials);
       alert("Login successful!");
-      onLogin();
-      console.log(response.data);
+      const { token, userId } = response.data;
+      sessionStorage.setItem("token", token); 
+      sessionStorage.setItem("userId", userId);
+      onLogin(userId);
       navigate("/landing");
-      sessionStorage.setItem("isLoggedIn", "true");
     } catch (error) {
       console.error("Error:", error);
       alert("Login failed!");
@@ -42,13 +40,13 @@ const Login = ({ onLogin }) => {
         <h2>Welcome Back!</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email</label>
+            <label htmlFor="phoneNumber" className="form-label">Phone Number</label>
             <input
-              type="email"
+              type="tel"
               className="form-control"
-              id="email"
-              name="email"
-              value={credentials.email}
+              id="phoneNumber"
+              name="phoneNumber"
+              value={credentials.phoneNumber}
               onChange={handleChange}
               required
             />
@@ -64,6 +62,7 @@ const Login = ({ onLogin }) => {
               onChange={handleChange}
               required
             />
+            <small className="form-text text-muted">Your password is your date of birth in DDMMYYYY format</small>
           </div>
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>

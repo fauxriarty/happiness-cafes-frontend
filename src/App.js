@@ -9,6 +9,7 @@ import Wishes from './components/Wishes';
 import Profile from './components/Profile';
 import Terms from './components/Terms';
 import LandingPage from './components/LandingPage';
+import './CommonStyles.css';
 import './App.css';
 
 function App() {
@@ -18,14 +19,16 @@ function App() {
     setIsAuthenticated(sessionStorage.getItem("isLoggedIn") === "true");
   }, []);
 
-  const handleLogin = () => {
+  const handleLogin = (userId) => {
     setIsAuthenticated(true);
     sessionStorage.setItem("isLoggedIn", "true");
+    sessionStorage.setItem("userId", userId); 
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     sessionStorage.removeItem("isLoggedIn");
+    sessionStorage.removeItem("userId"); 
   };
 
   return (
@@ -43,7 +46,7 @@ function App() {
             <>
               <Route path="/landing" element={<LandingPage />} />
               <Route path="/wishes" element={<Wishes />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile/:id" element={<Profile />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="*" element={<Navigate to="/landing" />} />
             </>
