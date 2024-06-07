@@ -26,7 +26,6 @@ const sdgs = [
   'Volunteer Networks'
 ];
 
-
 const Registration = ({ onRegister }) => {
   const navigate = useNavigate();
 
@@ -118,28 +117,30 @@ const Registration = ({ onRegister }) => {
                 onChange={handleUserChange}
                 required
               />
-              <div className="form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="isWhatsApp"
-                  name="isWhatsApp"
-                  checked={user.isWhatsApp}
-                  onChange={handleUserChange}
-                />
-                <label htmlFor="isWhatsApp" className="form-check-label">Is this a WhatsApp number?</label>
-              </div>
-              <div className="form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="newsletter"
-                  name="newsletter"
-                  checked={user.newsletter}
-                  onChange={handleUserChange}
-                />
-                <label htmlFor="newsletter" className="form-check-label">Sign up for our newsletter</label>
-              </div>
+            </div>
+          </div>
+          <div className="form-check-group">
+            <div className="form-check">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                id="isWhatsApp"
+                name="isWhatsApp"
+                checked={user.isWhatsApp}
+                onChange={handleUserChange}
+              />
+              <label htmlFor="isWhatsApp" className="form-check-label">Is this a WhatsApp number?</label>
+            </div>
+            <div className="form-check">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                id="newsletter"
+                name="newsletter"
+                checked={user.newsletter}
+                onChange={handleUserChange}
+              />
+              <label htmlFor="newsletter" className="form-check-label">Sign up for our newsletter</label>
             </div>
           </div>
           <div className="form-row">
@@ -170,7 +171,7 @@ const Registration = ({ onRegister }) => {
             <div className="form-group">
               <label htmlFor="address" className="form-label">Address</label>
               <input
-                type="text"
+              type="text"
                 className="form-control"
                 id="address"
                 name="address"

@@ -26,12 +26,12 @@
 }
 
 .button-group .btn-custom, .add-skill .btn-custom {
-    background-color: #f56d3c;
+    background-color: #3c3ff5;
     color: white;
     border: none;
     margin-top: 64px;
-    margin-inline: 221  px;
-    padding: 14px 32px;
+    padding: 12px 36px;
+    margin: 20px;
     font-size: 1.1rem;
     transition: background-color 0.3s, transform 0.3s;
     border-radius: 30px;
@@ -41,4 +41,9 @@
 .button-group .btn-custom:hover, .add-skill .btn-custom:hover {
     background-color: #ff6347;
     transform: scale(1.2);
+}
+
+a{
+    color: white;
+    margin-right: 20px  ;
 }

@@ -9,6 +9,7 @@ import Wishes from './components/Wishes';
 import Profile from './components/Profile';
 import Terms from './components/Terms';
 import LandingPage from './components/LandingPage';
+import AdminPortal from './AdminPortal';
 import './CommonStyles.css';
 import './App.css';
 
@@ -41,6 +42,8 @@ function App() {
               <Route path="/login" element={<Login onLogin={handleLogin} />} />
               <Route path="/register" element={<Registration onRegister={handleLogin} />} />
               <Route path="/" element={<Home isAuthenticated={isAuthenticated} />} />
+              <Route path="/admin" element={<AdminPortal />} />
+
             </>
           ) : (
             <>
@@ -49,6 +52,9 @@ function App() {
               <Route path="/profile/:id" element={<Profile />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="*" element={<Navigate to="/landing" />} />
+              <Route path="/admin" element={<AdminPortal />} />
+
+
             </>
           )}
         </Routes>

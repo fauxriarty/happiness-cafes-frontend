@@ -11,9 +11,12 @@ const Home = ({ isAuthenticated }) => {
         <>
           <p className="lead mb-5">Join us to share happiness and contribute to social causes.</p>
           <div className="button-group">
-            <Link to="/login" className="btn btn-custom btn-lg mx-3">Login</Link>
-            <Link to="/register" className="btn btn-custom btn-lg mx-3">Feedback</Link>
-          </div>
+            <Link to="/login" className="btn btn-custom btn-lg mx-3" style={{ backgroundColor:'turquoise'}}>Login</Link>
+            <Link to="/register" className="btn btn-custom btn-lg mx-3" style={{ backgroundColor:'turquoise'}}>Feedback</Link>
+          </div>  
+
+          <a href='/admin' className="lead mb-5" style={{ color:'white', fontSize: '14px', marginTop: '64px', fontStyle:'italic', marginRight:'28px'}}>Admin?</a>
+
         </>
       
     </div>
