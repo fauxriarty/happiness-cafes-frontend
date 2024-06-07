@@ -18,13 +18,13 @@
   max-width: 1000px;
   width: 100%;
   text-align: center;
-  margin: 0 auto;
+  margin: 20px;
 }
 
 .back-button {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  margin-top: 40px;
+  margin-left: -2px;
   background: none;
   border: none;
   scale:2;
@@ -62,15 +62,15 @@
 .form-group {
   flex: 1;
   min-width: 40%; 
-  margin: 10px;
+  margin: 24px;
 }
 
 .form-check-group {
   display: flex;  
   flex-direction: column;
   align-items: flex-start;
-  margin-left: 720px;
-  margin-top: -30px;
+  margin-left: 360px;
+  margin-top: -20px;
 }
 
 .form-check {
@@ -97,6 +97,7 @@
   border-radius: 5px;
   cursor: pointer;
   margin-top: 10px;
+  
   margin-right: 10px;
 }
 
@@ -123,10 +124,10 @@
 }
 
 h3 {
-  margin-top: 30px;
-  margin-bottom: 15px;
   color: #1e3c72;
   text-align: left;
+  margin: 24px;
+  margin-bottom: -12px;
   width: 100%;
 }
 

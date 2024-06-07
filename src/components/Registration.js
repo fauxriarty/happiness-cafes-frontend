@@ -91,7 +91,7 @@ const Registration = ({ onRegister }) => {
         <FaArrowLeft />
       </button>
       <div className="form-box">
-        <h2>New to the Family?</h2>
+        <h2 style={{margin:'15px'}}>New to the Family?</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-row">
             <div className="form-group">
@@ -253,8 +253,8 @@ const Registration = ({ onRegister }) => {
               </div>
             </div>
           ))}
-          <button type="button" className="btn btn-secondary" onClick={addWish}>Add Another Wish</button>
-          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="button" className="btn btn-secondary"  style={{marginBottom:"12px"}} onClick={addWish}>Add Another Wish</button>
+          <button type="submit" className="btn btn-primary" style={{marginBottom:"12px"}}>Submit</button>
         </form>
       </div>
     </div>

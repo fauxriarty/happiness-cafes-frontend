@@ -1,24 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
 
-const Home = ({ isAuthenticated }) => {
+const logo = process.env.PUBLIC_URL + '/logo.png';
+const Home = () => {
   return (
     <div className="home-container text-center d-flex flex-column align-items-center justify-content-center">
-      <h1 className="display-4 mb-4">Welcome to Happiness Cafes!</h1>
-      
-        <>
-          <p className="lead mb-5">Join us to share happiness and contribute to social causes.</p>
-          <div className="button-group">
-            <Link to="/login" className="btn btn-custom btn-lg mx-3" style={{ backgroundColor:'turquoise'}}>Login</Link>
-            <Link to="/register" className="btn btn-custom btn-lg mx-3" style={{ backgroundColor:'turquoise'}}>Feedback</Link>
-          </div>  
-
-          <a href='/admin' className="lead mb-5" style={{ color:'white', fontSize: '14px', marginTop: '64px', fontStyle:'italic', marginRight:'28px'}}>Admin?</a>
-
-        </>
-      
+      <h1 className="display-4 mb-3 mt-8">Welcome to Happiness Cafe!</h1>
+      <>
+        <p className="lead mb-0">Join us to share happiness and contribute to social causes.</p>
+        <div className="content-container d-flex">
+          <img src={logo} alt="Descriptive text" className="home-logo" />
+          <div className="button-group d-flex flex-column">
+            <Link to="/login" className="btn btn-custom btn-lg mb-3">Login</Link>
+            <Link to="/register" className="btn btn-custom btn-lg mb-3">Feedback</Link>
+            <a href='/admin' className="admin-link lead">Admin?</a>
+          </div>
+        </div>
+      </>
     </div>
   );
 };
