@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import '../CommonStyles.css';
 
 const Navigation = ({ isAuthenticated, onLogout }) => {
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ const Navigation = ({ isAuthenticated, onLogout }) => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg">
+    <nav className="navbar navbar-expand-lg" style={{backgroundColor:'#DECBA4'}}>
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">Home</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

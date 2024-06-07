@@ -49,13 +49,13 @@ const AdminPortal = () => {
 
   return (
     <div className="admin-container">
-      <button className="back-button" onClick={() => navigate('/')}>
-        <FaArrowLeft /> Back
+      <button className="back-button" style={{marginLeft:'18px'}} onClick={() => navigate('/')}>
+        <FaArrowLeft />
       </button>
-      <h2>HC Admin Portal</h2>
+      <h2  style={{marginTop:'18px'}}>HC Admin Portal</h2>
       <form className="query-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="adminLocation">HC Location</label>
+        <div className="form-group mt-3">
+          <label htmlFor="adminLocation" >HC Location</label>
           <input
             type="text"
             id="adminLocation"

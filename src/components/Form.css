@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(0deg, #1e3c72 0%, #216df0 100%);
+  background: linear-gradient(135deg,  #3E5151 0%, #DECBA4 100%);
   color: white;
   padding: 20px;
   box-sizing: border-box;
@@ -22,12 +22,11 @@
 }
 
 .back-button {
-  position: absolute;
+  position: relative;
   margin-top: 40px;
-  margin-left: -2px;
+  margin-left: -890px;
   background: none;
   border: none;
-  scale:2;
   color: white;
   font-size: 24px;
   cursor: pointer;
@@ -90,7 +89,7 @@
 }
 
 .btn-secondary {
-  background-color: #2387df;
+  background-color: #3E5151;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -106,8 +105,8 @@
 }
 
 .btn-primary {
-  background-color: #ff7f50;
-  color: white;
+  background-color: #f7e9ce;
+  color: black  ;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
