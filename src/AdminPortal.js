@@ -26,10 +26,18 @@ const sdgs = [
   'Volunteer Networks'
 ];
 
+const states = [
+  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa',
+  'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala',
+  'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland',
+  'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
+  'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
+];
+
 const AdminPortal = () => {
   const navigate = useNavigate(); 
 
-  const [query, setQuery] = useState({ category: '', location: '', description: '', adminLocation: '' });
+  const [query, setQuery] = useState({ category: '', state: '', description: '' });
   const [users, setUsers] = useState([]);
 
   const handleQueryChange = (e) => {
@@ -37,14 +45,18 @@ const AdminPortal = () => {
     setQuery({ ...query, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const fetchUsersByCategoryAndState = async (category, state) => {
     try {
-      const response = await axios.post('http://localhost:8080/admin/query', query);
+      const response = await axios.post('http://localhost:8080/admin/queryByCategoryAndState', { category, state });
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetchUsersByCategoryAndState(query.category, query.state);
   };
 
   return (
@@ -52,18 +64,22 @@ const AdminPortal = () => {
       <button className="back-button" style={{marginLeft:'18px'}} onClick={() => navigate('/')}>
         <FaArrowLeft />
       </button>
-      <h2  style={{marginTop:'18px'}}>HC Admin Portal</h2>
+      <h2 style={{marginTop:'18px'}}>HC Admin Portal</h2>
       <form className="query-form" onSubmit={handleSubmit}>
         <div className="form-group mt-3">
-          <label htmlFor="adminLocation" >HC Location</label>
-          <input
-            type="text"
-            id="adminLocation"
-            name="adminLocation"
-            value={query.adminLocation}
+          <label htmlFor="state">HC Location (State)</label>
+          <select
+            id="state"
+            name="state"
+            value={query.state}
             onChange={handleQueryChange}
             required
-          />
+          >
+            <option value="">Select State</option>
+            {states.map((state, i) => (
+              <option key={i} value={state}>{state}</option>
+            ))}
+          </select>
         </div>
         <div className="form-group">
           <label htmlFor="category">Category</label>
@@ -79,17 +95,6 @@ const AdminPortal = () => {
               <option key={i} value={sdg}>{sdg}</option>
             ))}
           </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="location">User Location</label>
-          <input
-            type="text"
-            id="location"
-            name="location"
-            value={query.location}
-            onChange={handleQueryChange}
-            required
-          />
         </div>
         <div className="form-group">
           <label htmlFor="description">Description</label>
@@ -112,8 +117,9 @@ const AdminPortal = () => {
                 <p><strong>Name:</strong> {user.name}</p>
                 <p><strong>Phone:</strong> {user.phoneNumber}</p>
                 <p><strong>Email:</strong> {user.email}</p>
-                <p><strong>Address:</strong> {user.address}</p>
-                <p><strong>Resource:</strong> {user.description}</p>
+                <p><strong>City:</strong> {user.city}</p>
+                <p><strong>State:</strong> {user.state}</p>
+                <p><strong>Resource:</strong> {user.haves.find(have => have.category === query.category)?.description || 'N/A'}</p>
               </li>
             ))}
           </ul>

@@ -1,6 +1,5 @@
-body{
-  background: linear-gradient(135deg,  #3E5151 0%, #DECBA4 100%);
-
+body {
+  background: linear-gradient(135deg, #3E5151 0%, #DECBA4 100%);
 }
 
 .admin-container {
@@ -58,7 +57,7 @@ h2 {
   margin-left: 320px;
   margin-top: 20px;
   margin-bottom: 20px;
-  justify-content:center ;
+  justify-content: center;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -101,14 +100,12 @@ h2 {
 
 .user-list li p strong {
   color: #333;
-  
 }
 
 .back-button {
   position: absolute;
   top: 42px;
   scale: 1;
-  background: none;
   border: none;
   color: #333;
   font-size: 16px;
