@@ -1,53 +1,53 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './Form.css';
-import { FaArrowLeft } from 'react-icons/fa';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "./Form.css";
+import { FaArrowLeft } from "react-icons/fa";
 
 const sdgs = [
-  'Food & Nutrition',
-  'Water & Sanitation',
-  'Shelter & Housing',
-  'Health & Well-being',
-  'Primary Education',
-  'Vocational Training',
-  'Adult Education & Literacy',
-  'Skill Development',
-  'Employment & Job Creation',
-  'Entrepreneurship & Business Development',
-  'Energy',
-  'Transportation',
-  'Waste Management',
-  'Gender Equality & Women\'s Empowerment',
-  'Social Services',
-  'Local & Regional Partnerships',
-  'International Aid & Cooperation',
-  'Knowledge Sharing Platforms',
-  'Volunteer Networks'
+  "Food & Nutrition",
+  "Water & Sanitation",
+  "Shelter & Housing",
+  "Health & Well-being",
+  "Primary Education",
+  "Vocational Training",
+  "Adult Education & Literacy",
+  "Skill Development",
+  "Employment & Job Creation",
+  "Entrepreneurship & Business Development",
+  "Energy",
+  "Transportation",
+  "Waste Management",
+  "Gender Equality & Women's Empowerment",
+  "Social Services",
+  "Local & Regional Partnerships",
+  "International Aid & Cooperation",
+  "Knowledge Sharing Platforms",
+  "Volunteer Networks",
 ];
 
 const Registration = ({ onRegister }) => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState({
-    name: '',
-    phoneNumber: '',
+    name: "",
+    phoneNumber: "",
     isWhatsApp: false,
     newsletter: false,
-    email: '',
-    occupation: '',
-    dateOfBirth: '',
-    pincode: '',
-    state: '',
-    city: ''
+    email: "",
+    occupation: "",
+    dateOfBirth: "",
+    pincode: "",
+    state: "",
+    city: "",
   });
 
-  const [haves, setHaves] = useState([{ category: '', description: '' }]);
-  const [wishes, setWishes] = useState([{ category: '', description: '' }]);
+  const [haves, setHaves] = useState([{ category: "", description: "" }]);
+  const [wishes, setWishes] = useState([{ category: "", description: "" }]);
 
   const handleUserChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setUser({ ...user, [name]: type === 'checkbox' ? checked : value });
+    setUser({ ...user, [name]: type === "checkbox" ? checked : value });
   };
 
   const handlePincodeChange = async (e) => {
@@ -56,18 +56,20 @@ const Registration = ({ onRegister }) => {
 
     if (value.length === 6) {
       try {
-        const response = await axios.get(`https://api.postalpincode.in/pincode/${value}`);
+        const response = await axios.get(
+          `https://api.postalpincode.in/pincode/${value}`
+        );
         if (response.data[0].Status === "Success") {
-          setUser({ 
-            ...user, 
-            state: response.data[0].PostOffice[0].State, 
-            city: response.data[0].PostOffice[0].District 
-          });
+          setUser((prevUser) => ({
+            ...prevUser,
+            state: response.data[0].PostOffice[0].State,
+            city: response.data[0].PostOffice[0].District,
+          }));
         } else {
           alert("Invalid pincode");
         }
       } catch (error) {
-        console.error('Error fetching state and city:', error);
+        console.error("Error fetching state and city:", error);
       }
     }
   };
@@ -87,39 +89,56 @@ const Registration = ({ onRegister }) => {
   };
 
   const addHave = () => {
-    setHaves([...haves, { category: '', description: '' }]);
+    setHaves([...haves, { category: "", description: "" }]);
   };
 
   const addWish = () => {
-    setWishes([...wishes, { category: '', description: '' }]);
+    setWishes([...wishes, { category: "", description: "" }]);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:8080/users', { ...user, haves, wishes });
-      alert('User registered successfully!');
-      onRegister();
-      console.log(response.data);
-      navigate('/landing');
-      sessionStorage.setItem("isLoggedIn", "true");
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Registration failed!');
-    }
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const filteredHaves = haves.filter(
+    (have) => have.category && have.description
+  );
+  const filteredWishes = wishes.filter(
+    (wish) => wish.category && wish.description
+  );
+
+  const dataToSubmit = {
+    ...user,
+    dateOfBirth: `${user.dateOfBirth}T00:00:00.000Z`, // append time to dateOfBirth
+    haves: filteredHaves,
+    wishes: filteredWishes,
   };
+
+  try {
+    const response = await axios.post("http://localhost:8080/users", dataToSubmit);
+    alert("User registered successfully!");
+    onRegister();
+    console.log(response.data);
+    navigate("/landing");
+    sessionStorage.setItem("isLoggedIn", "true");
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Registration failed!");
+  }
+};
 
   return (
     <div className="form-container">
-      <button className="back-button" onClick={() => navigate('/')}>
+      <button className="back-button" onClick={() => navigate("/")}>
         <FaArrowLeft />
       </button>
       <div className="form-box">
-        <h2 style={{margin:'15px'}}>New to the Family?</h2>
+        <h2 style={{ margin: "15px" }}>New to the Family?</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="name" className="form-label">Name</label>
+              <label htmlFor="name" className="form-label">
+                Name
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -131,7 +150,9 @@ const Registration = ({ onRegister }) => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="phoneNumber" className="form-label">Phone Number</label>
+              <label htmlFor="phoneNumber" className="form-label">
+                Phone Number
+              </label>
               <input
                 type="tel"
                 className="form-control"
@@ -153,7 +174,9 @@ const Registration = ({ onRegister }) => {
                 checked={user.isWhatsApp}
                 onChange={handleUserChange}
               />
-              <label htmlFor="isWhatsApp" className="form-check-label">Is this a WhatsApp number?</label>
+              <label htmlFor="isWhatsApp" className="form-check-label">
+                Is this a WhatsApp number?
+              </label>
             </div>
             <div className="form-check">
               <input
@@ -164,12 +187,16 @@ const Registration = ({ onRegister }) => {
                 checked={user.newsletter}
                 onChange={handleUserChange}
               />
-              <label htmlFor="newsletter" className="form-check-label">Sign up for our newsletter</label>
+              <label htmlFor="newsletter" className="form-check-label">
+                Sign up for our newsletter
+              </label>
             </div>
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="email" className="form-label">Email (optional)</label>
+              <label htmlFor="email" className="form-label">
+                Email (optional)
+              </label>
               <input
                 type="email"
                 className="form-control"
@@ -180,7 +207,9 @@ const Registration = ({ onRegister }) => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="occupation" className="form-label">Occupation</label>
+              <label htmlFor="occupation" className="form-label">
+                Occupation
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -193,7 +222,9 @@ const Registration = ({ onRegister }) => {
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="pincode" className="form-label">Pincode</label>
+              <label htmlFor="pincode" className="form-label">
+                Pincode
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -208,7 +239,9 @@ const Registration = ({ onRegister }) => {
               )}
             </div>
             <div className="form-group">
-              <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
+              <label htmlFor="dateOfBirth" className="form-label">
+                Date of Birth
+              </label>
               <input
                 type="date"
                 className="form-control"
@@ -218,7 +251,9 @@ const Registration = ({ onRegister }) => {
                 onChange={handleUserChange}
                 required
               />
-              <small className="form-text text-muted">Your password will be your date of birth in DDMMYYYY format</small>
+              <small className="form-text text-muted">
+                Your password will be your date of birth in DDMMYYYY format
+              </small>
             </div>
           </div>
           <h3>Your Haves (Abundances)</h3>
@@ -234,7 +269,9 @@ const Registration = ({ onRegister }) => {
                 >
                   <option value="">Select Category</option>
                   {sdgs.map((sdg, i) => (
-                    <option key={i} value={sdg}>{sdg}</option>
+                    <option key={i} value={sdg}>
+                      {sdg}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -250,7 +287,9 @@ const Registration = ({ onRegister }) => {
               </div>
             </div>
           ))}
-          <button type="button" className="btn btn-secondary" onClick={addHave}>Add Another Abundance</button>
+          <button type="button" className="btn btn-secondary" onClick={addHave}>
+            Add Another Abundance
+          </button>
           <h3>Your Wishes</h3>
           {wishes.map((wish, index) => (
             <div key={index} className="form-row">
@@ -264,7 +303,9 @@ const Registration = ({ onRegister }) => {
                 >
                   <option value="">Select Category</option>
                   {sdgs.map((sdg, i) => (
-                    <option key={i} value={sdg}>{sdg}</option>
+                    <option key={i} value={sdg}>
+                      {sdg}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -280,8 +321,21 @@ const Registration = ({ onRegister }) => {
               </div>
             </div>
           ))}
-          <button type="button" className="btn btn-secondary" style={{marginBottom:"12px"}} onClick={addWish}>Add Another Wish</button>
-          <button type="submit" className="btn btn-primary" style={{marginBottom:"12px"}}>Submit</button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            style={{ marginBottom: "12px" }}
+            onClick={addWish}
+          >
+            Add Another Wish
+          </button>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{ marginBottom: "12px" }}
+          >
+            Submit
+          </button>
         </form>
       </div>
     </div>

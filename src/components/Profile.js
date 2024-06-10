@@ -4,14 +4,35 @@ import axios from "axios";
 import "../CommonStyles.css";
 import "./Profile.css";
 
+const sdgs = [
+  "Food & Nutrition",
+  "Water & Sanitation",
+  "Shelter & Housing",
+  "Health & Well-being",
+  "Primary Education",
+  "Vocational Training",
+  "Adult Education & Literacy",
+  "Skill Development",
+  "Employment & Job Creation",
+  "Entrepreneurship & Business Development",
+  "Energy",
+  "Transportation",
+  "Waste Management",
+  "Gender Equality & Women's Empowerment",
+  "Social Services",
+  "Local & Regional Partnerships",
+  "International Aid & Cooperation",
+  "Knowledge Sharing Platforms",
+  "Volunteer Networks",
+];
+
 const Profile = () => {
   const { id } = useParams();
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-  const [skills, setSkills] = useState([]);
-  const [newSkill, setNewSkill] = useState("");
+
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -19,8 +40,12 @@ const Profile = () => {
     state: "",
     phoneNumber: "",
     dateOfBirth: "",
-    tasks: [],
+    haves: [],
+    wishes: [],
   });
+
+  const [newHave, setNewHave] = useState({ category: "", description: "" });
+  const [newWish, setNewWish] = useState({ category: "", description: "" });
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -31,8 +56,12 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setUserData(response.data);
-        setSkills(response.data.skills || []);
+        const user = response.data;
+        setUserData({
+          ...user,
+          haves: user.haves || [],
+          wishes: user.wishes || [],
+        });
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -41,24 +70,50 @@ const Profile = () => {
     fetchUserData();
   }, [id]);
 
-  const handleAddSkill = async () => {
+  const handleAddHave = async () => {
     const token = sessionStorage.getItem("token");
-    if (newSkill) {
+    if (newHave.category && newHave.description) {
       try {
-        const updatedSkills = [...skills, newSkill];
-        await axios.put(
-          `http://localhost:8080/users/${id}`,
-          { skills: updatedSkills },
+        const response = await axios.put(
+          `http://localhost:8080/users/${id}/haves`,
+          newHave,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        setSkills(updatedSkills);
-        setNewSkill("");
+        setUserData((prevState) => ({
+          ...prevState,
+          haves: response.data.haves,
+        }));
+        setNewHave({ category: "", description: "" });
       } catch (error) {
-        console.error("Error updating skills:", error);
+        console.error("Error updating haves:", error);
+      }
+    }
+  };
+
+  const handleAddWish = async () => {
+    const token = sessionStorage.getItem("token");
+    if (newWish.category && newWish.description) {
+      try {
+        const response = await axios.put(
+          `http://localhost:8080/users/${id}/wishes`,
+          newWish,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setUserData((prevState) => ({
+          ...prevState,
+          wishes: response.data.wishes,
+        }));
+        setNewWish({ category: "", description: "" });
+      } catch (error) {
+        console.error("Error updating wishes:", error);
       }
     }
   };
@@ -100,30 +155,80 @@ const Profile = () => {
             )}
             {userData.dateOfBirth && (
               <p>
-                <strong>Date of Birth:</strong>{" "}
-                {formatDate(userData.dateOfBirth)}
+                <strong>Date of Birth:</strong> {formatDate(userData.dateOfBirth)}
               </p>
             )}
           </div>
         </div>
       </div>
       <div className="skills-section">
-        <h2 style={{ color: "white" }}>Your Skills</h2>
+        <h2 style={{ color: "white" }}>Your Haves</h2>
         <div className="skills-list">
-          {skills.map((skill, index) => (
+          {userData.haves.map((have, index) => (
             <span key={index} className="skill-item">
-              • {skill}
+              • {have.category}: {have.description}
             </span>
           ))}
         </div>
         <div className="add-skill">
+          <select
+            value={newHave.category}
+            onChange={(e) =>
+              setNewHave({ ...newHave, category: e.target.value })
+            }
+          >
+            <option value="">Select Category</option>
+            {sdgs.map((sdg, i) => (
+              <option key={i} value={sdg}>
+                {sdg}
+              </option>
+            ))}
+          </select>
           <input
             type="text"
-            value={newSkill}
-            onChange={(e) => setNewSkill(e.target.value)}
-            placeholder="Add a new skill"
+            value={newHave.description}
+            onChange={(e) =>
+              setNewHave({ ...newHave, description: e.target.value })
+            }
+            placeholder="Add a new have"
           />
-          <button onClick={handleAddSkill} className="btn btn-custom">
+          <button onClick={handleAddHave} className="btn btn-custom">
+            Add
+          </button>
+        </div>
+      </div>
+      <div className="skills-section">
+        <h2 style={{ color: "white" }}>Your Wishes</h2>
+        <div className="skills-list">
+          {userData.wishes.map((wish, index) => (
+            <span key={index} className="skill-item">
+              • {wish.category}: {wish.description}
+            </span>
+          ))}
+        </div>
+        <div className="add-skill">
+          <select
+            value={newWish.category}
+            onChange={(e) =>
+              setNewWish({ ...newWish, category: e.target.value })
+            }
+          >
+            <option value="">Select Category</option>
+            {sdgs.map((sdg, i) => (
+              <option key={i} value={sdg}>
+                {sdg}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            value={newWish.description}
+            onChange={(e) =>
+              setNewWish({ ...newWish, description: e.target.value })
+            }
+            placeholder="Add a new wish"
+          />
+          <button onClick={handleAddWish} className="btn btn-custom">
             Add
           </button>
         </div>

@@ -5,82 +5,97 @@
     width: 100%;
     padding: 20px;
     overflow-y: auto;
-}
-
-.profile-section, .skills-section {
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, #3E5151 0%, #DECBA4 100%);
+  }
+  
+  .profile-section,
+  .skills-section {
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
     padding: 20px;
-    margin: 10px;
+    margin: 20px;
     width: 90%;
-    max-width: 800px;
+    max-width: 900px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.user-details {
+  }
+  
+  .profile-section h1,
+  .skills-section h2 {
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  }
+  
+  .user-details {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
-
-.user-detail-row {
+  }
+  
+  .user-detail-row {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    max-width: 500px; 
-    margin-bottom: 40px; 
-}
-.user-details p {
-    margin: 5px 0;
+    max-width: 600px;
+    margin-bottom: 20px;
+  }
+  
+  .user-details p {
+    margin: 10px 0;
     width: 45%;
     text-align: left;
-}
-
-.skills-section h2 {
-    margin: 10px 0;
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  }
+  
+  .skills-section h2 {
+    margin: 20px 0;
     text-align: center;
     width: 100%;
-}
-
-.skills-list {
+  }
+  
+  .skills-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
     margin-top: 10px;
-}
-
-.skill-item {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    margin: 5px;
+  }
+  
+  .skill-item {
+    background: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    margin: 10px;
     padding: 10px 15px;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-size: 1rem;
-}
-
-.add-skill {
+  }
+  
+  .add-skill {
     display: flex;
     align-items: center;
     width: 100%;
     flex-wrap: nowrap;
-}
-
-.add-skill input {
-    padding: 16px;
+    margin-top: 20px;
+  }
+  
+  .add-skill select,
+  .add-skill input {
+    padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 30px;
+    border-radius: 10px;
     flex: 1;
     height: 46px;
     box-sizing: border-box;
-}
-
-.add-skill .btn-custom {
+    margin-right: 10px;
+  }
+  
+  .add-skill .btn-custom {
     background-color: #ff7f50;
     color: white;
     border: none;
@@ -90,11 +105,17 @@
     border-radius: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     height: 46px;
-    margin-left: 16px;
-    flex-shrink: 0; 
-}
-
-.add-skill .btn-custom:hover {
+    flex-shrink: 0;
+  }
+  
+  .add-skill .btn-custom:hover {
     background-color: #ff6347;
     transform: scale(1.1);
-}
+  }
+  
+  h1,
+  h2,
+  p {
+    color: white;
+  }
+  
