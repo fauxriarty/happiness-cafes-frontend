@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import '../CommonStyles.css';
-import './Profile.css';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import "../CommonStyles.css";
+import "./Profile.css";
 
 const Profile = () => {
   const { id } = useParams();
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
   const [skills, setSkills] = useState([]);
-  const [newSkill, setNewSkill] = useState('');
+  const [newSkill, setNewSkill] = useState("");
   const [userData, setUserData] = useState({
-    name: '',
-    email: '',
-    address: '',
-    phoneNumber: '',
-    dateOfBirth: '',
-    tasks: []
+    name: "",
+    email: "",
+    city: "",
+    state: "",
+    phoneNumber: "",
+    dateOfBirth: "",
+    tasks: [],
   });
 
   useEffect(() => {
@@ -23,13 +28,13 @@ const Profile = () => {
       try {
         const response = await axios.get(`http://localhost:8080/users/${id}`, {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
         setUserData(response.data);
         setSkills(response.data.skills || []);
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       }
     };
 
@@ -41,15 +46,19 @@ const Profile = () => {
     if (newSkill) {
       try {
         const updatedSkills = [...skills, newSkill];
-        await axios.put(`http://localhost:8080/users/${id}`, { skills: updatedSkills }, {
-          headers: {
-            Authorization: `Bearer ${token}`
+        await axios.put(
+          `http://localhost:8080/users/${id}`,
+          { skills: updatedSkills },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
         setSkills(updatedSkills);
-        setNewSkill('');
+        setNewSkill("");
       } catch (error) {
-        console.error('Error updating skills:', error);
+        console.error("Error updating skills:", error);
       }
     }
   };
@@ -60,33 +69,63 @@ const Profile = () => {
         <h1>Your Profile</h1>
         <div className="user-details">
           <div className="user-detail-row">
-            <p><strong>Name:</strong> {userData.name}</p>
-            <p><strong>Email:</strong> {userData.email}</p>
+            {userData.name && (
+              <p>
+                <strong>Name:</strong> {userData.name}
+              </p>
+            )}
+            {userData.email && (
+              <p>
+                <strong>Email:</strong> {userData.email}
+              </p>
+            )}
           </div>
           <div className="user-detail-row">
-            <p><strong>Address:</strong> {userData.address}</p>
-            <p><strong>Phone Number:</strong> {userData.phoneNumber}</p>
+            {userData.city && (
+              <p>
+                <strong>City:</strong> {userData.city}
+              </p>
+            )}
+            {userData.state && (
+              <p>
+                <strong>State:</strong> {userData.state}
+              </p>
+            )}
           </div>
           <div className="user-detail-row">
-            <p><strong>Date of Birth:</strong> {userData.dateOfBirth}</p>
+            {userData.phoneNumber && (
+              <p>
+                <strong>Phone Number:</strong> {userData.phoneNumber}
+              </p>
+            )}
+            {userData.dateOfBirth && (
+              <p>
+                <strong>Date of Birth:</strong>{" "}
+                {formatDate(userData.dateOfBirth)}
+              </p>
+            )}
           </div>
         </div>
       </div>
       <div className="skills-section">
-        <h2>Your Skills</h2>
+        <h2 style={{ color: "white" }}>Your Skills</h2>
         <div className="skills-list">
           {skills.map((skill, index) => (
-            <span key={index} className="skill-item">• {skill}</span>
+            <span key={index} className="skill-item">
+              • {skill}
+            </span>
           ))}
         </div>
         <div className="add-skill">
-          <input 
-            type="text" 
-            value={newSkill} 
-            onChange={(e) => setNewSkill(e.target.value)} 
-            placeholder="Add a new skill" 
+          <input
+            type="text"
+            value={newSkill}
+            onChange={(e) => setNewSkill(e.target.value)}
+            placeholder="Add a new skill"
           />
-          <button onClick={handleAddSkill} className="btn btn-custom">Add Skill</button>
+          <button onClick={handleAddSkill} className="btn btn-custom">
+            Add
+          </button>
         </div>
       </div>
     </div>

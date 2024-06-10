@@ -37,7 +37,9 @@ const Registration = ({ onRegister }) => {
     email: '',
     occupation: '',
     dateOfBirth: '',
-    address: ''
+    pincode: '',
+    state: '',
+    city: ''
   });
 
   const [haves, setHaves] = useState([{ category: '', description: '' }]);
@@ -46,6 +48,28 @@ const Registration = ({ onRegister }) => {
   const handleUserChange = (e) => {
     const { name, value, type, checked } = e.target;
     setUser({ ...user, [name]: type === 'checkbox' ? checked : value });
+  };
+
+  const handlePincodeChange = async (e) => {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+
+    if (value.length === 6) {
+      try {
+        const response = await axios.get(`https://api.postalpincode.in/pincode/${value}`);
+        if (response.data[0].Status === "Success") {
+          setUser({ 
+            ...user, 
+            state: response.data[0].PostOffice[0].State, 
+            city: response.data[0].PostOffice[0].District 
+          });
+        } else {
+          alert("Invalid pincode");
+        }
+      } catch (error) {
+        console.error('Error fetching state and city:', error);
+      }
+    }
   };
 
   const handleHavesChange = (index, e) => {
@@ -169,16 +193,19 @@ const Registration = ({ onRegister }) => {
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="address" className="form-label">Address</label>
+              <label htmlFor="pincode" className="form-label">Pincode</label>
               <input
-              type="text"
+                type="text"
                 className="form-control"
-                id="address"
-                name="address"
-                value={user.address}
-                onChange={handleUserChange}
+                id="pincode"
+                name="pincode"
+                value={user.pincode}
+                onChange={handlePincodeChange}
                 required
               />
+              {user.state && user.city && (
+                <small className="form-text text-muted">{`${user.city}, ${user.state}`}</small>
+              )}
             </div>
             <div className="form-group">
               <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
@@ -253,7 +280,7 @@ const Registration = ({ onRegister }) => {
               </div>
             </div>
           ))}
-          <button type="button" className="btn btn-secondary"  style={{marginBottom:"12px"}} onClick={addWish}>Add Another Wish</button>
+          <button type="button" className="btn btn-secondary" style={{marginBottom:"12px"}} onClick={addWish}>Add Another Wish</button>
           <button type="submit" className="btn btn-primary" style={{marginBottom:"12px"}}>Submit</button>
         </form>
       </div>

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
-const logo = process.env.PUBLIC_URL + '/logo.png';
 const Home = () => {
+  const logo = useMemo(() => process.env.PUBLIC_URL + '/logo.png', []);
+
   return (
     <div className="home-container text-center d-flex flex-column align-items-center justify-content-center">
       <h1 className="display-4 mb-3 mt-8">Welcome to Happiness Cafe!</h1>
