@@ -1,7 +1,21 @@
+@keyframes gradientMovement {
+  0% {
+    background-position: 30% 25%;
+  }
+  50% {
+    background-position: 100% 65%;
+  }
+  100% {
+    background-position: 30% 25%;
+  }
+}
+
 .home-container {
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(135deg,  #3E5151 0%, #DECBA4 100%);
+  background: linear-gradient(0deg,  #3E5151 0%, #DECBA4 100%);
+  background-size: 200% 200%;
+  animation: gradientMovement 5s ease-in-out infinite;
   color: white;
   text-align: center;
   display: flex;
@@ -15,6 +29,7 @@
   margin: 0;
   padding: 0;
 }
+
 
 .home-container h1 {
   font-size: 4.5rem;

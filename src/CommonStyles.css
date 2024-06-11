@@ -1,18 +1,33 @@
+
+@keyframes gradientMovement {
+  0% {
+    background-position: 50% 35%;
+  }
+  50% {
+    background-position: 100% 65%;
+  }
+  100% {
+    background-position: 50% 35%;
+  }
+}
+
 .common-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  animation: gradientMovement 20s ease infinite;
+
   text-align: center;
-  background: linear-gradient(135deg, #3e5151 0%, #decba4 100%);
+  background: linear-gradient(0deg, #3e5151 0%, #decba4 100%);
   color: white;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
 }
 
-.common-container h1 {
+.common-container h1 {  
   font-size: 3rem;
   color: #f3f4f6;
   margin-bottom: 1rem;
