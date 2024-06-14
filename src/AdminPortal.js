@@ -1,43 +1,70 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';  
-import './AdminPortal.css';
-import { FaArrowLeft } from 'react-icons/fa';  
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "./AdminPortal.css";
+import { FaArrowLeft } from "react-icons/fa";
 
 const sdgs = [
-  'Food & Nutrition',
-  'Water & Sanitation',
-  'Shelter & Housing',
-  'Health & Well-being',
-  'Primary Education',
-  'Vocational Training',
-  'Adult Education & Literacy',
-  'Skill Development',
-  'Employment & Job Creation',
-  'Entrepreneurship & Business Development',
-  'Energy',
-  'Transportation',
-  'Waste Management',
-  'Gender Equality & Women\'s Empowerment',
-  'Social Services',
-  'Local & Regional Partnerships',
-  'International Aid & Cooperation',
-  'Knowledge Sharing Platforms',
-  'Volunteer Networks'
+  "Food & Nutrition",
+  "Water & Sanitation",
+  "Shelter & Housing",
+  "Health & Well-being",
+  "Primary Education",
+  "Vocational Training",
+  "Adult Education & Literacy",
+  "Skill Development",
+  "Employment & Job Creation",
+  "Entrepreneurship & Business Development",
+  "Energy",
+  "Transportation",
+  "Waste Management",
+  "Gender Equality & Women's Empowerment",
+  "Social Services",
+  "Local & Regional Partnerships",
+  "International Aid & Cooperation",
+  "Knowledge Sharing Platforms",
+  "Volunteer Networks",
 ];
 
 const states = [
-  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa',
-  'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala',
-  'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland',
-  'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
-  'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
 ];
 
 const AdminPortal = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
-  const [query, setQuery] = useState({ category: '', state: '', description: '' });
+  const [query, setQuery] = useState({
+    category: "",
+    state: "",
+    description: "",
+  });
   const [users, setUsers] = useState([]);
 
   const handleQueryChange = (e) => {
@@ -50,24 +77,35 @@ const AdminPortal = () => {
       //for vertex ai later:
       // const response = await axios.post('http://localhost:8080/admin/queryByCategoryAndState', { category, state, description });
 
-      const response = await axios.post('http://localhost:8080/admin/geminiQueryByCategoryAndState', { category, state, description });
+      const response = await axios.post(
+        "http://localhost:8080/admin/geminiQueryByCategoryAndState",
+        { category, state, description }
+      );
       setUsers(response.data);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error("Error fetching users:", error);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetchUsersByCategoryAndState(query.category, query.state, query.description);
+    fetchUsersByCategoryAndState(
+      query.category,
+      query.state,
+      query.description
+    );
   };
 
   return (
     <div className="admin-container">
-      <button className="back-button" style={{ marginLeft: '18px' }} onClick={() => navigate('/')}>
+      <button
+        className="back-button"
+        style={{ marginLeft: "18px" }}
+        onClick={() => navigate("/")}
+      >
         <FaArrowLeft />
       </button>
-      <h2 style={{ marginTop: '18px' }}>HC Admin Portal</h2>
+      <h2 style={{ marginTop: "18px" }}>HC Admin Portal</h2>
       <form className="query-form" onSubmit={handleSubmit}>
         <div className="form-group mt-3">
           <label htmlFor="state">HC Location (State)</label>
@@ -80,7 +118,9 @@ const AdminPortal = () => {
           >
             <option value="">Select State</option>
             {states.map((state, i) => (
-              <option key={i} value={state}>{state}</option>
+              <option key={i} value={state}>
+                {state}
+              </option>
             ))}
           </select>
         </div>
@@ -95,7 +135,9 @@ const AdminPortal = () => {
           >
             <option value="">Select Category</option>
             {sdgs.map((sdg, i) => (
-              <option key={i} value={sdg}>{sdg}</option>
+              <option key={i} value={sdg}>
+                {sdg}
+              </option>
             ))}
           </select>
         </div>
@@ -109,19 +151,29 @@ const AdminPortal = () => {
             required
           ></textarea>
         </div>
-        <button type="submit" className="btn-submit">Submit Query</button>
+        <button type="submit" className="btn-submit">
+          Submit Query
+        </button>
       </form>
       <div className="user-list">
         <h3>Users in Selected Category</h3>
         {users.length > 0 ? (
           <ul>
-            {users.map((user, index) => (
-              <li key={index}>
-                <p><strong>Name:</strong> {user.name}</p>
-                <p><strong>Phone:</strong> {user.phoneNumber}</p>
-                <p><strong>Reason:</strong> {user.reason}</p>
-              </li>
-            ))}
+            {users.map((user, index) =>
+              user.name && user.phoneNumber && user.reason ? (
+                <li key={index}>
+                  <p>
+                    <strong>Name:</strong> {user.name}
+                  </p>
+                  <p>
+                    <strong>Phone:</strong> {user.phoneNumber}
+                  </p>
+                  <p>
+                    <strong>Reason:</strong> {user.reason}
+                  </p>
+                </li>
+              ) : null
+            )}
           </ul>
         ) : (
           <p>No users found.</p>
