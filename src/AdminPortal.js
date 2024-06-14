@@ -74,9 +74,6 @@ const AdminPortal = () => {
 
   const fetchUsersByCategoryAndState = async (category, state, description) => {
     try {
-      //for vertex ai later:
-      // const response = await axios.post('http://localhost:8080/admin/queryByCategoryAndState', { category, state, description });
-
       const response = await axios.post(
         "http://localhost:8080/admin/geminiQueryByCategoryAndState",
         { category, state, description }
@@ -159,21 +156,33 @@ const AdminPortal = () => {
         <h3>Users in Selected Category</h3>
         {users.length > 0 ? (
           <ul>
-            {users.map((user, index) =>
-              user.name && user.phoneNumber && user.reason ? (
-                <li key={index}>
-                  <p>
-                    <strong>Name:</strong> {user.name}
+            {users.map((user, index) => (
+              <li key={index}>
+                <p>
+                  <strong>Name:</strong> {user.name}
+                </p>
+                <p>
+                  <strong>Phone:</strong> {user.phoneNumber}
+                </p>
+                <p>
+                  <strong>City:</strong> {user.city}
+                </p>
+                <p>
+                  <strong>State:</strong> {user.state}
+                </p>
+                <p>
+                  <strong>Pincode:</strong> {user.pincode}
+                </p>
+                <p>
+                  <strong>Reason:</strong> {user.reason}
+                </p>
+                {user.warning && (
+                  <p style={{ color: "red" }}>
+                    <strong>Warning:</strong> {user.warning}
                   </p>
-                  <p>
-                    <strong>Phone:</strong> {user.phoneNumber}
-                  </p>
-                  <p>
-                    <strong>Reason:</strong> {user.reason}
-                  </p>
-                </li>
-              ) : null
-            )}
+                )}
+              </li>
+            ))}
           </ul>
         ) : (
           <p>No users found.</p>
