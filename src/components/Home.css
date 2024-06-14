@@ -1,12 +1,12 @@
 @keyframes gradientMovement {
   0% {
-    background-position: 30% 25%;
+    background-position: 30% 30%;
   }
   50% {
-    background-position: 100% 65%;
+    background-position: 100% 60%;
   }
   100% {
-    background-position: 30% 25%;
+    background-position: 30% 30%;
   }
 }
 
@@ -55,8 +55,8 @@
 }
 
 .home-logo {
-  width: 500px;
-  height: 300px;
+  width: 600px;
+  height: 350px;
   margin-right: 6rem;
 }
 

@@ -45,9 +45,12 @@ const AdminPortal = () => {
     setQuery({ ...query, [name]: value });
   };
 
-  const fetchUsersByCategoryAndState = async (category, state) => {
+  const fetchUsersByCategoryAndState = async (category, state, description) => {
     try {
-      const response = await axios.post('http://localhost:8080/admin/queryByCategoryAndState', { category, state });
+      //for vertex ai later:
+      // const response = await axios.post('http://localhost:8080/admin/queryByCategoryAndState', { category, state, description });
+
+      const response = await axios.post('http://localhost:8080/admin/geminiQueryByCategoryAndState', { category, state, description });
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -56,15 +59,15 @@ const AdminPortal = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetchUsersByCategoryAndState(query.category, query.state);
+    fetchUsersByCategoryAndState(query.category, query.state, query.description);
   };
 
   return (
     <div className="admin-container">
-      <button className="back-button" style={{marginLeft:'18px'}} onClick={() => navigate('/')}>
+      <button className="back-button" style={{ marginLeft: '18px' }} onClick={() => navigate('/')}>
         <FaArrowLeft />
       </button>
-      <h2 style={{marginTop:'18px'}}>HC Admin Portal</h2>
+      <h2 style={{ marginTop: '18px' }}>HC Admin Portal</h2>
       <form className="query-form" onSubmit={handleSubmit}>
         <div className="form-group mt-3">
           <label htmlFor="state">HC Location (State)</label>
@@ -116,10 +119,7 @@ const AdminPortal = () => {
               <li key={index}>
                 <p><strong>Name:</strong> {user.name}</p>
                 <p><strong>Phone:</strong> {user.phoneNumber}</p>
-                <p><strong>Email:</strong> {user.email}</p>
-                <p><strong>City:</strong> {user.city}</p>
-                <p><strong>State:</strong> {user.state}</p>
-                <p><strong>Resource:</strong> {user.haves.find(have => have.category === query.category)?.description || 'N/A'}</p>
+                <p><strong>Reason:</strong> {user.reason}</p>
               </li>
             ))}
           </ul>
