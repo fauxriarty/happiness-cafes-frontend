@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../CommonStyles.css";
 import "./Profile.css";
@@ -25,9 +25,11 @@ const sdgs = [
   "Knowledge Sharing Platforms",
   "Volunteer Networks",
 ];
-
 const Profile = () => {
-  const { id } = useParams();
+  const { id: routeId } = useParams();
+  const navigate = useNavigate();
+  const userId = routeId || sessionStorage.getItem("userId");
+
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -48,10 +50,15 @@ const Profile = () => {
   const [newWish, setNewWish] = useState({ category: "", description: "" });
 
   useEffect(() => {
+    if (!userId) {
+      navigate("/login"); // redirect to login if userId is not available
+      return;
+    }
+
     const fetchUserData = async () => {
       const token = sessionStorage.getItem("token");
       try {
-        const response = await axios.get(`http://localhost:8080/users/${id}`, {
+        const response = await axios.get(`http://localhost:8080/users/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -68,14 +75,14 @@ const Profile = () => {
     };
 
     fetchUserData();
-  }, [id]);
+  }, [userId, navigate]);
 
   const handleAddHave = async () => {
     const token = sessionStorage.getItem("token");
     if (newHave.category && newHave.description) {
       try {
         const response = await axios.put(
-          `http://localhost:8080/users/${id}/haves`,
+          `http://localhost:8080/users/${userId}/haves`,
           newHave,
           {
             headers: {
@@ -99,7 +106,7 @@ const Profile = () => {
     if (newWish.category && newWish.description) {
       try {
         const response = await axios.put(
-          `http://localhost:8080/users/${id}/wishes`,
+          `http://localhost:8080/users/${userId}/wishes`,
           newWish,
           {
             headers: {

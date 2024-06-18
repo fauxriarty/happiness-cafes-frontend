@@ -96,35 +96,36 @@ const Registration = ({ onRegister }) => {
     setWishes([...wishes, { category: "", description: "" }]);
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const filteredHaves = haves.filter(
-    (have) => have.category && have.description
-  );
-  const filteredWishes = wishes.filter(
-    (wish) => wish.category && wish.description
-  );
+    const filteredHaves = haves.filter(
+      (have) => have.category && have.description
+    );
+    const filteredWishes = wishes.filter(
+      (wish) => wish.category && wish.description
+    );
 
-  const dataToSubmit = {
-    ...user,
-    dateOfBirth: `${user.dateOfBirth}T00:00:00.000Z`, // append time to dateOfBirth
-    haves: filteredHaves,
-    wishes: filteredWishes,
+    const dataToSubmit = {
+      ...user,
+      dateOfBirth: `${user.dateOfBirth}T00:00:00.000Z`, // append time to dateOfBirth
+      haves: filteredHaves,
+      wishes: filteredWishes,
+    };
+
+    try {
+      const response = await axios.post("http://localhost:8080/users", dataToSubmit);
+      alert("User registered successfully!");
+      onRegister();
+      console.log(response.data);
+      sessionStorage.setItem("userId", response.data.id); // store the user ID in session storage
+      sessionStorage.setItem("isLoggedIn", "true");
+      navigate(`/profile/${response.data.id}`);
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Registration failed!");
+    }
   };
-
-  try {
-    const response = await axios.post("http://localhost:8080/users", dataToSubmit);
-    alert("User registered successfully!");
-    onRegister();
-    console.log(response.data);
-    navigate("/landing");
-    sessionStorage.setItem("isLoggedIn", "true");
-  } catch (error) {
-    console.error("Error:", error);
-    alert("Registration failed!");
-  }
-};
 
   return (
     <div className="form-container">
@@ -288,8 +289,7 @@ const Registration = ({ onRegister }) => {
             </div>
           ))}
           <button type="button" className="btn btn-secondary" onClick={addHave}>
-            Add Another Abundance
-          </button>
+            Add Another Abundance          </button>
           <h3>Your Wishes</h3>
           {wishes.map((wish, index) => (
             <div key={index} className="form-row">
