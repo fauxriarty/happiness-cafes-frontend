@@ -25,6 +25,7 @@ const sdgs = [
   "Knowledge Sharing Platforms",
   "Volunteer Networks",
 ];
+
 const Profile = () => {
   const { id: routeId } = useParams();
   const navigate = useNavigate();
@@ -125,6 +126,46 @@ const Profile = () => {
     }
   };
 
+  const handleRemoveHave = async (haveId) => {
+    const token = sessionStorage.getItem("token");
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/users/${userId}/haves/${haveId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUserData((prevState) => ({
+        ...prevState,
+        haves: response.data.haves,
+      }));
+    } catch (error) {
+      console.error("Error removing have:", error);
+    }
+  };
+
+  const handleRemoveWish = async (wishId) => {
+    const token = sessionStorage.getItem("token");
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/users/${userId}/wishes/${wishId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUserData((prevState) => ({
+        ...prevState,
+        wishes: response.data.wishes,
+      }));
+    } catch (error) {
+      console.error("Error removing wish:", error);
+    }
+  };
+
   return (
     <div className="common-container profile-page">
       <div className="profile-section">
@@ -172,9 +213,14 @@ const Profile = () => {
         <h2 style={{ color: "white" }}>Your Haves</h2>
         <div className="skills-list">
           {userData.haves.map((have, index) => (
-            <span key={index} className="skill-item">
-              • {have.category}: {have.description}
-            </span>
+            <div key={index} className="skill-item">
+              <span>
+                • {have.category}: {have.description}
+              </span>
+              <button onClick={() => handleRemoveHave(have.id)} className="remove-btn">
+                -
+              </button>
+            </div>
           ))}
         </div>
         <div className="add-skill">
@@ -208,9 +254,14 @@ const Profile = () => {
         <h2 style={{ color: "white" }}>Your Wishes</h2>
         <div className="skills-list">
           {userData.wishes.map((wish, index) => (
-            <span key={index} className="skill-item">
-              • {wish.category}: {wish.description}
-            </span>
+            <div key={index} className="skill-item">
+              <span>
+                • {wish.category}: {wish.description}
+              </span>
+              <button onClick={() => handleRemoveWish(wish.id)} className="remove-btn">
+                -
+              </button>
+            </div>
           ))}
         </div>
         <div className="add-skill">

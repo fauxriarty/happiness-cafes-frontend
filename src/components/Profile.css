@@ -119,3 +119,10 @@
     color: white;
   }
   
+
+  .remove-btn{
+    background:none;
+    padding: 6px;
+    margin-left:12px;
+    border:none;
+  }
