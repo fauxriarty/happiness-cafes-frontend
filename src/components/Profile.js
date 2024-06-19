@@ -65,7 +65,7 @@ const Profile = () => {
     const fetchUserData = async () => {
       const token = sessionStorage.getItem("token");
       try {
-        const response = await axios.get(`http://localhost:8080/${userId}`, {
+        const response = await axios.get(`http://localhost:8080/users/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

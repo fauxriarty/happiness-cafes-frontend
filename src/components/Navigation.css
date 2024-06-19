@@ -6,14 +6,13 @@
 .navbar-brand {
   transition: transform 0.3s;
   font-size: 1.5rem;
-  padding: 8px;
-  margin-left: 18px;
+  padding: 18px;
   color: white;
 }
 
 
 .navbar-nav .nav-link {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   padding: 24px;
   margin: 0 12px;
   color: white;
