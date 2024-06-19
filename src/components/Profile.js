@@ -50,14 +50,18 @@ const Profile = () => {
   });
 
   const [newHave, setNewHave] = useState({ category: "", description: "" });
-  const [newWish, setNewWish] = useState({ category: "", description: "", skills: [] });
+  const [newWish, setNewWish] = useState({
+    category: "",
+    description: "",
+    skills: [],
+  });
 
   useEffect(() => {
     if (!userId) {
       navigate("/login"); // redirect to login if userId is not available
       return;
     }
-  
+
     const fetchUserData = async () => {
       const token = sessionStorage.getItem("token");
       try {
@@ -76,10 +80,10 @@ const Profile = () => {
         console.error("Error fetching user data:", error);
       }
     };
-  
+
     fetchUserData();
   }, [userId, navigate]);
-  
+
   const handleAddHave = async () => {
     const token = sessionStorage.getItem("token");
     if (newHave.category && newHave.description) {
@@ -103,7 +107,7 @@ const Profile = () => {
       }
     }
   };
-  
+
   const handleAddWish = async () => {
     const token = sessionStorage.getItem("token");
     if (newWish.category && newWish.description) {
@@ -127,7 +131,7 @@ const Profile = () => {
       }
     }
   };
-  
+
   const handleRemoveHave = async (haveId) => {
     try {
       setUserData((prevState) => ({
@@ -150,21 +154,49 @@ const Profile = () => {
     }
   };
 
-  const handleAddWishSkill = (wishIndex) => {
-    const newWishes = [...userData.wishes];
-    newWishes[wishIndex].skills.push("");
-    setUserData({ ...userData, wishes: newWishes });
+  const handleSkillUpdate = async (wishId, skill, action) => {
+    const token = sessionStorage.getItem("token");
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/${userId}/wishes/${wishId}/skills`,
+        { skill, action },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUserData((prevState) => ({
+        ...prevState,
+        wishes: response.data.wishes,
+      }));
+    } catch (error) {
+      console.error(`Error ${action} skill:`, error);
+    }
   };
 
-  const handleWishSkillChange = (wishIndex, skillIndex, e) => {
+  const handleAddWishSkill = (wishIndex) => {
     const newWishes = [...userData.wishes];
-    newWishes[wishIndex].skills[skillIndex] = e.target.value;
+    if (newWishes[wishIndex].newSkill) {
+      const skill = newWishes[wishIndex].newSkill;
+      newWishes[wishIndex].skills.push(skill);
+      handleSkillUpdate(newWishes[wishIndex].id, skill, "add");
+      newWishes[wishIndex].newSkill = "";
+      setUserData({ ...userData, wishes: newWishes });
+    }
+  };
+
+  const handleWishSkillChange = (wishIndex, e) => {
+    const newWishes = [...userData.wishes];
+    newWishes[wishIndex].newSkill = e.target.value;
     setUserData({ ...userData, wishes: newWishes });
   };
 
   const handleRemoveWishSkill = (wishIndex, skillIndex) => {
     const newWishes = [...userData.wishes];
+    const skillToRemove = newWishes[wishIndex].skills[skillIndex];
     newWishes[wishIndex].skills.splice(skillIndex, 1);
+    handleSkillUpdate(newWishes[wishIndex].id, skillToRemove, "remove");
     setUserData({ ...userData, wishes: newWishes });
   };
 
@@ -205,22 +237,30 @@ const Profile = () => {
             )}
             {userData.dateOfBirth && (
               <p>
-                <strong>Date of Birth:</strong> {formatDate(userData.dateOfBirth)}
+                <strong>Date of Birth:</strong>{" "}
+                {formatDate(userData.dateOfBirth)}
               </p>
             )}
           </div>
         </div>
       </div>
       <div className="skills-section">
-        <h2 style={{ color: "white" }}>Your Haves</h2>
-        <div className="skills-list">
+        <h2>Your Haves</h2>
+        <div className="card-container">
           {userData.haves.map((have, index) => (
-            <span key={index} className="skill-item">
-              • {have.category}: {have.description}
-              <button className="remove-button" onClick={() => handleRemoveHave(have.id)}>
-                <FaMinus />
-              </button>
-            </span>
+            <div key={index} className="card">
+              <div className="card-content">
+                <span>
+                  <strong>{have.category}:</strong> {have.description}
+                </span>
+                <button
+                  className="remove-button"
+                  onClick={() => handleRemoveHave(have.id)}
+                >
+                  <FaMinus />
+                </button>
+              </div>
+            </div>
           ))}
         </div>
         <div className="add-skill">
@@ -251,35 +291,54 @@ const Profile = () => {
         </div>
       </div>
       <div className="skills-section">
-        <h2 style={{ color: "white" }}>Your Wishes</h2>
-        <div className="skills-list">
+        <h2>Your Wishes</h2>
+        <div className="card-container">
           {userData.wishes.map((wish, wishIndex) => (
-            <div key={wishIndex} className="wish-item">
-              <span>
-                • {wish.category}: {wish.description}
-                <button className="remove-button" onClick={() => handleRemoveWish(wish.id)}>
+            <div key={wishIndex} className="card">
+              <div className="card-content">
+                <span>
+                  <strong>{wish.category}:</strong> {wish.description}
+                </span>
+                <button
+                  className="remove-button"
+                  onClick={() => handleRemoveWish(wish.id)}
+                >
                   <FaMinus />
                 </button>
-              </span>
+              </div>
               <div className="skills-required">
-                {wish.skills.map((skill, skillIndex) => (
-                  <div key={skillIndex} className="skill-item">
-                    <input
-                      type="text"
-                      value={skill}
-                      onChange={(e) => handleWishSkillChange(wishIndex, skillIndex, e)}
-                    />
-                    <button className="remove-button" onClick={() => handleRemoveWishSkill(wishIndex, skillIndex)}>
-                      <FaMinus />
-                    </button>
-                  </div>
-                ))}
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => handleAddWishSkill(wishIndex)}
-                >
-                  <FaPlus /> Add Skill
-                </button>
+                {(wish.skills || []).map(
+                  (
+                    skill,
+                    skillIndex // Ensure skills is treated as an array
+                  ) => (
+                    <div key={skillIndex} className="skill-item">
+                      <span>{skill}</span>
+                      <button
+                        className="remove-button"
+                        onClick={() =>
+                          handleRemoveWishSkill(wishIndex, skillIndex)
+                        }
+                      >
+                        <FaMinus />
+                      </button>
+                    </div>
+                  )
+                )}
+                <div className="add-skill">
+                  <input
+                    type="text"
+                    value={wish.newSkill || ""}
+                    onChange={(e) => handleWishSkillChange(wishIndex, e)}
+                    placeholder="New skill"
+                  />
+                  <button
+                    className="btn btn-secondary mb-2"
+                    onClick={() => handleAddWishSkill(wishIndex)}
+                  >
+                    <FaPlus /> Add Skill
+                  </button>
+                </div>
               </div>
             </div>
           ))}

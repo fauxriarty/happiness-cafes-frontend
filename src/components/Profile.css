@@ -25,13 +25,14 @@
   .profile-section h1,
   .skills-section h2 {
     margin-bottom: 20px;
-    color: #ffffff;
+    color: black;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
   }
   
   .user-details {
     display: flex;
     flex-direction: column;
+    
     align-items: center;
     justify-content: center;
   }
@@ -48,32 +49,8 @@
     margin: 10px 0;
     width: 45%;
     text-align: left;
-    color: #ffffff;
+    color: black;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-  }
-  
-  .skills-section h2 {
-    margin: 20px 0;
-    text-align: center;
-    width: 100%;
-  }
-  
-  .skills-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-    margin-top: 10px;
-  }
-  
-  .skill-item {
-    background: rgba(255, 255, 255, 0.3);
-    color: #ffffff;
-    margin: 10px;
-    padding: 10px 15px;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-size: 1rem;
   }
   
   .add-skill {
@@ -95,30 +72,7 @@
     margin-right: 10px;
   }
   
-  .add-skill .btn-custom {
-    background-color: #ff7f50;
-    color: white;
-    border: none;
-    padding: 8px 30px;
-    font-size: 1.1rem;
-    transition: background-color 0.3s, transform 0.3s;
-    border-radius: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: 46px;
-    flex-shrink: 0;
-  }
-  
-  .add-skill .btn-custom:hover {
-    background-color: #ff6347;
-    transform: scale(1.1);
-  }
-  
-  h1,
-  h2,
-  p {
-    color: white;
-  }
-  
+ 
 
   .remove-button{
     background:none;
@@ -126,3 +80,93 @@
     font-weight:400;
     border:none;
   }
+
+  
+  .profile-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    overflow-y: auto;
+    background: linear-gradient(0deg, #3E5151 0%, #DECBA4 100%);
+  }
+  
+  .profile-section,
+  .skills-section {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px;
+    width: 90%;
+    max-width: 900px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+  }
+  
+  .card {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .skills-required {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .skill-item {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 5px 10px;
+    border-radius: 20px;
+  }
+  
+  .add-skill {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .add-skill input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-right: 10px;
+  }
+  
+  .add-skill .btn-custom {
+    background-color: #ff7f50;
+    color: white;
+    border: none;
+    padding: 8px 30px;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-skill .btn-custom:hover {
+    background-color: #ff6347;
+    scale:1.05;
+  }
+  

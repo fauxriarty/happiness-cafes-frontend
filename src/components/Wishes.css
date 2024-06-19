@@ -1,0 +1,23 @@
+.wishes-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .wish-item {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .wish-item h3 {
+    margin: 0;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .wish-item p {
+    margin: 0;
+    color: #666;
+  }
