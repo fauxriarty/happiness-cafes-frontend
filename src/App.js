@@ -23,13 +23,13 @@ function App() {
   const handleLogin = (userId) => {
     setIsAuthenticated(true);
     sessionStorage.setItem("isLoggedIn", "true");
-    sessionStorage.setItem("userId", userId); 
+    sessionStorage.setItem("userId", userId);
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     sessionStorage.removeItem("isLoggedIn");
-    sessionStorage.removeItem("userId"); 
+    sessionStorage.removeItem("userId");
   };
 
   return (
@@ -43,7 +43,7 @@ function App() {
               <Route path="/register" element={<Registration onRegister={handleLogin} />} />
               <Route path="/" element={<Home isAuthenticated={isAuthenticated} />} />
               <Route path="/admin" element={<AdminPortal />} />
-
+              <Route path="*" element={<Navigate to="/" />} />
             </>
           ) : (
             <>
@@ -51,10 +51,9 @@ function App() {
               <Route path="/wishes" element={<Wishes />} />
               <Route path="/profile/:id" element={<Profile />} />
               <Route path="/terms" element={<Terms />} />
-              <Route path="*" element={<Navigate to="/landing" />} />
+              <Route path="/" element={<Navigate to="/landing" />} />
               <Route path="/admin" element={<AdminPortal />} />
-
-
+              <Route path="*" element={<Navigate to="/landing" />} />
             </>
           )}
         </Routes>
@@ -64,3 +63,4 @@ function App() {
 }
 
 export default App;
+

@@ -120,9 +120,9 @@
   }
   
 
-  .remove-btn{
+  .remove-button{
     background:none;
-    padding: 6px;
-    margin-left:12px;
+    margin:8px;
+    font-weight:400;
     border:none;
   }

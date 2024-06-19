@@ -26,7 +26,7 @@ const sdgs = [
   "Volunteer Networks",
 ];
 
-const Registration = ({ onRegister }) => {
+const Registration = ({ Registration }) => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState({
@@ -43,7 +43,9 @@ const Registration = ({ onRegister }) => {
   });
 
   const [haves, setHaves] = useState([{ category: "", description: "" }]);
-  const [wishes, setWishes] = useState([{ category: "", description: "" }]);
+  const [wishes, setWishes] = useState([
+    { category: "", description: "", skills: [] },
+  ]);
 
   const handleUserChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -88,12 +90,25 @@ const Registration = ({ onRegister }) => {
     setWishes(newWishes);
   };
 
+  const handleWishSkillsChange = (index, skillIndex, e) => {
+    const { value } = e.target;
+    const newWishes = [...wishes];
+    newWishes[index].skills[skillIndex] = value;
+    setWishes(newWishes);
+  };
+
   const addHave = () => {
     setHaves([...haves, { category: "", description: "" }]);
   };
 
   const addWish = () => {
-    setWishes([...wishes, { category: "", description: "" }]);
+    setWishes([...wishes, { category: "", description: "", skills: [] }]);
+  };
+
+  const addWishSkill = (index) => {
+    const newWishes = [...wishes];
+    newWishes[index].skills.push("");
+    setWishes(newWishes);
   };
 
   const handleSubmit = async (e) => {
@@ -114,13 +129,16 @@ const Registration = ({ onRegister }) => {
     };
 
     try {
-      const response = await axios.post("http://localhost:8080/users", dataToSubmit);
+      const response = await axios.post("http://localhost:8080/", dataToSubmit);
       alert("User registered successfully!");
-      onRegister();
-      console.log(response.data);
-      sessionStorage.setItem("userId", response.data.id); // store the user ID in session storage
+      const { token, user: registeredUser } = response.data;
+      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("userId", registeredUser.id);
       sessionStorage.setItem("isLoggedIn", "true");
-      navigate(`/profile/${response.data.id}`);
+      window.location.reload();
+      setTimeout(() => {
+        navigate("/landing");
+      }, 1000); // delay of 1 second
     } catch (error) {
       console.error("Error:", error);
       alert("Registration failed!");
@@ -289,7 +307,8 @@ const Registration = ({ onRegister }) => {
             </div>
           ))}
           <button type="button" className="btn btn-secondary" onClick={addHave}>
-            Add Another Abundance          </button>
+            Add Another Abundance
+          </button>
           <h3>Your Wishes</h3>
           {wishes.map((wish, index) => (
             <div key={index} className="form-row">
@@ -319,21 +338,35 @@ const Registration = ({ onRegister }) => {
                   onChange={(e) => handleWishesChange(index, e)}
                 />
               </div>
+              <div className="form-group">
+                <label className="form-label">Skills Required</label>
+                {wish.skills.map((skill, skillIndex) => (
+                  <input
+                    key={skillIndex}
+                    type="text"
+                    className="form-control"
+                    name="skills"
+                    value={skill}
+                    onChange={(e) =>
+                      handleWishSkillsChange(index, skillIndex, e)
+                    }
+                    placeholder="Skill"
+                  />
+                ))}
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => addWishSkill(index)}
+                >
+                  Add Skill
+                </button>
+              </div>
             </div>
           ))}
-          <button
-            type="button"
-            className="btn btn-secondary"
-            style={{ marginBottom: "12px" }}
-            onClick={addWish}
-          >
+          <button type="button" className="btn btn-secondary" onClick={addWish}>
             Add Another Wish
           </button>
-          <button
-            type="submit"
-            className="btn btn-primary"
-            style={{ marginBottom: "12px" }}
-          >
+          <button type="submit" className="btn btn-primary">
             Submit
           </button>
         </form>
