@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../CommonStyles.css";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import ClipLoader from "react-spinners/ClipLoader";
 
 import "./Profile.css";
 
@@ -55,6 +56,7 @@ const Profile = () => {
     description: "",
     skills: [],
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!userId) {
@@ -76,8 +78,10 @@ const Profile = () => {
           haves: user.haves || [],
           wishes: user.wishes || [],
         });
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setLoading(false);
       }
     };
 
@@ -199,6 +203,14 @@ const Profile = () => {
     handleSkillUpdate(newWishes[wishIndex].id, skillToRemove, "remove");
     setUserData({ ...userData, wishes: newWishes });
   };
+
+  if (loading) {
+    return (
+      <div className="loader-container">
+        <ClipLoader color={"#123abc"} loading={loading} size={50} />
+      </div>
+    );
+  }
 
   return (
     <div className="common-container profile-page">

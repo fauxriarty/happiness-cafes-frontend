@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Wishes.css";
 import ReactPaginate from 'react-paginate';
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Wishes = () => {
   const [wishes, setWishes] = useState([]);
   const [userHaves, setUserHaves] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [loading, setLoading] = useState(true);
   const wishesPerPage = 4;
 
   useEffect(() => {
@@ -27,8 +29,10 @@ const Wishes = () => {
         },
       });
       setUserHaves(response.data.haves || []);
+      setLoading(false); // set loading to false when data is fetched
     } catch (error) {
       console.error("Error fetching user haves:", error);
+      setLoading(false); //set loading to false on error
     }
   };
 
@@ -36,8 +40,10 @@ const Wishes = () => {
     try {
       const response = await axios.get("http://localhost:8080/wishes");
       setWishes(response.data);
+      setLoading(false); //set loading to false when data is fetched
     } catch (error) {
       console.error("Error fetching wishes:", error);
+      setLoading(false); // loading to false on error
     }
   };
 
@@ -90,8 +96,16 @@ const Wishes = () => {
 
   return (
     <div className="wishes-container">
-      <h1>Wishes</h1>
-      {renderWishes()}
+      {loading ? (
+        <div className="loader-container">
+          <ClipLoader color={"#123abc"} loading={loading} size={50} />
+        </div>
+      ) : (
+        <>
+          <h1>Wishes</h1>
+          {renderWishes()}
+        </>
+      )}
     </div>
   );
 };

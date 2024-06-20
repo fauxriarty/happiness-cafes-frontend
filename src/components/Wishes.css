@@ -1,3 +1,11 @@
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(0deg, #3e5151 0%, #decba4 100%);
+  }
+  
 .wishes-container {
     width: 100%;
     margin: 0 auto;
