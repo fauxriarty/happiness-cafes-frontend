@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "./Wishes.css";
 import ReactPaginate from 'react-paginate';
@@ -11,12 +11,7 @@ const Wishes = () => {
   const [loading, setLoading] = useState(true);
   const wishesPerPage = 4;
 
-  useEffect(() => {
-    fetchUserHaves();
-    fetchWishes();
-  }, []);
-
-  const fetchUserHaves = async () => {
+  const fetchUserHaves = useCallback(async () => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
     if (!userId || !token) {
@@ -29,43 +24,74 @@ const Wishes = () => {
         },
       });
       setUserHaves(response.data.haves || []);
-      setLoading(false); // set loading to false when data is fetched
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching user haves:", error);
-      setLoading(false); //set loading to false on error
+      setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchWishes = async () => {
+  const fetchWishes = useCallback(async () => {
     try {
       const response = await axios.get("http://localhost:8080/wishes");
       setWishes(response.data);
-      setLoading(false); //set loading to false when data is fetched
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching wishes:", error);
-      setLoading(false); // loading to false on error
+      setLoading(false);
     }
-  };
+  }, []);
 
-  const matchesUserSkills = (wish) => {
-    return wish.skills.some((skill) =>
-      userHaves.some((have) => have.description.toLowerCase().includes(skill.toLowerCase()))
-    );
-  };
+  const fetchRelevantWishes = useCallback(async () => {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) {
+      return;
+    }
+    try {
+      const response = await axios.post(`http://localhost:8080/wishes/relevant`, {
+        userId,
+        userHaves
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.length === 0) {
+        fetchWishes(); // Fetch all wishes if no relevant wishes found
+      } else {
+        setWishes(response.data);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching relevant wishes:", error);
+      setLoading(false);
+    }
+  }, [userHaves, fetchWishes]);
+
+  useEffect(() => {
+    fetchUserHaves();
+  }, [fetchUserHaves]);
+
+  useEffect(() => {
+    if (userHaves.length > 0) {
+      fetchRelevantWishes();
+    } else {
+      fetchWishes();
+    }
+  }, [userHaves, fetchRelevantWishes, fetchWishes]);
 
   const renderWishes = () => {
-    const matchedWishes = wishes.filter(matchesUserSkills);
-    const displayedWishes = matchedWishes.length === 0 ? wishes : matchedWishes;
     const offset = currentPage * wishesPerPage;
-    const currentWishes = displayedWishes.slice(offset, offset + wishesPerPage);
+    const currentWishes = wishes.slice(offset, offset + wishesPerPage);
 
     return (
       <>
         {currentWishes.map((wish) => (
           <div key={wish.id} className="wish-card">
-            <h3>{wish.category}</h3>
+            <h3>{wish.title}</h3> {/* Adjust to display title */}
             <p>{wish.description}</p>
-            <p><strong>Skills Required:</strong> {wish.skills.join(", ")}</p>
+            <p><strong>Skills Required:</strong> {wish.skills ? wish.skills.join(", ") : "Not specified"}</p>
             {wish.user && (
               <>
                 <p><strong>Posted by:</strong> {wish.user.name}</p>
@@ -79,7 +105,7 @@ const Wishes = () => {
           nextLabel={'next'}
           breakLabel={'...'}
           breakClassName={'break-me'}
-          pageCount={Math.ceil(displayedWishes.length / wishesPerPage)}
+          pageCount={Math.ceil(wishes.length / wishesPerPage)}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
@@ -103,7 +129,11 @@ const Wishes = () => {
       ) : (
         <>
           <h1>Wishes</h1>
-          {renderWishes()}
+          {wishes.length === 0 ? (
+            <p>No relevant wishes found. Showing all wishes:</p>
+          ) : (
+            renderWishes()
+          )}
         </>
       )}
     </div>
