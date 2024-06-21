@@ -9,6 +9,7 @@ const Wishes = () => {
   const [userHaves, setUserHaves] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [searching, setSearching] = useState(false);
   const wishesPerPage = 4;
 
   const fetchUserHaves = useCallback(async () => {
@@ -49,6 +50,7 @@ const Wishes = () => {
       return;
     }
     try {
+      setSearching(true);  // Set searching to true when starting the search for relevant wishes
       const response = await axios.post(`http://localhost:8080/wishes/relevant`, {
         userId,
         userHaves
@@ -57,6 +59,7 @@ const Wishes = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      setSearching(false); // Set searching to false when search completes
       if (response.data.length === 0) {
         fetchWishes(); // Fetch all wishes if no relevant wishes found
       } else {
@@ -65,6 +68,7 @@ const Wishes = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching relevant wishes:", error);
+      setSearching(false); // Set searching to false on error
       setLoading(false);
     }
   }, [userHaves, fetchWishes]);
@@ -89,7 +93,7 @@ const Wishes = () => {
       <>
         {currentWishes.map((wish) => (
           <div key={wish.id} className="wish-card">
-            <h3>{wish.title}</h3> {/* Adjust to display title */}
+            <h3>{wish.title}</h3>
             <p>{wish.description}</p>
             <p><strong>Skills Required:</strong> {wish.skills ? wish.skills.join(", ") : "Not specified"}</p>
             {wish.user && (
@@ -129,6 +133,7 @@ const Wishes = () => {
       ) : (
         <>
           <h1>Wishes</h1>
+          {searching && <p>Searching for relevant wishes. Till then, here are all the wishes:</p>}
           {wishes.length === 0 ? (
             <p>No relevant wishes found. Showing all wishes:</p>
           ) : (
