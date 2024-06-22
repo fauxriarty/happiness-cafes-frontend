@@ -77,3 +77,25 @@
   background-color: #3e5151;
   color: #fff;
 }
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.show-more-button {
+  margin: 0 64px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #DECBA4 ;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.show-more-button:hover {
+  background-color: #DECBA4;
+  scale:1.1;
+}
