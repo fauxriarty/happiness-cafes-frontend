@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
-import axios from '../axiosConfig'; 
+import axios from "../axiosConfig";
 import "./Wishes.css";
 import ReactPaginate from "react-paginate";
 import ClipLoader from "react-spinners/ClipLoader";
+import Modal from "react-modal";
+
+Modal.setAppElement("#root");
 
 const Wishes = () => {
   const [wishes, setWishes] = useState([]);
@@ -10,6 +13,10 @@ const Wishes = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [searching, setSearching] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredWishes, setFilteredWishes] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedWish, setSelectedWish] = useState(null);
   const wishesPerPage = 4;
 
   const fetchUserHaves = useCallback(async () => {
@@ -19,14 +26,11 @@ const Wishes = () => {
       return;
     }
     try {
-      const response = await axios.get(
-        `/users/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setUserHaves(response.data.haves || []);
       setLoading(false);
     } catch (error) {
@@ -39,6 +43,7 @@ const Wishes = () => {
     try {
       const response = await axios.get("/wishes");
       setWishes(response.data);
+      setFilteredWishes(response.data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching wishes:", error);
@@ -71,6 +76,7 @@ const Wishes = () => {
         fetchWishes(); // Fetch all wishes if no relevant wishes found
       } else {
         setWishes(response.data);
+        setFilteredWishes(response.data);
         sessionStorage.setItem("relevantWishes", JSON.stringify(response.data));
       }
       setLoading(false);
@@ -85,6 +91,7 @@ const Wishes = () => {
     const storedWishes = sessionStorage.getItem("relevantWishes");
     if (storedWishes) {
       setWishes(JSON.parse(storedWishes));
+      setFilteredWishes(JSON.parse(storedWishes));
       setLoading(false);
     } else {
       fetchUserHaves();
@@ -99,15 +106,88 @@ const Wishes = () => {
     }
   }, [userHaves, fetchRelevantWishes, fetchWishes]);
 
+  useEffect(() => {
+    const results = wishes.filter(
+      (wish) =>
+        wish.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        wish.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (wish.skills &&
+          wish.skills.some((skill) =>
+            skill.toLowerCase().includes(searchTerm.toLowerCase())
+          )) ||
+        (wish.user &&
+          wish.user.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+    setFilteredWishes(results);
+  }, [searchTerm, wishes]);
+
+  const handleRequestJoin = async (wishId) => {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    try {
+      await axios.post(
+        `/wishes/request/${wishId}`,
+        { userId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert("Request sent successfully");
+    } catch (error) {
+      console.error("Error requesting to join:", error);
+      alert("Failed to send request");
+    }
+  };
+
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+  };
+
+  const handleShowRelevant = () => {
+    sessionStorage.removeItem("relevantWishes");
+    setLoading(true);
+    fetchUserHaves();
+  };
+
+  const handleShowAll = async () => {
+    sessionStorage.removeItem("relevantWishes");
+    setLoading(true);
+    try {
+      const response = await axios.get("/wishes");
+      setWishes(response.data);
+      setFilteredWishes(response.data);
+    } catch (error) {
+      console.error("Error fetching wishes:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const openModal = (wish) => {
+    setSelectedWish(wish);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedWish(null);
+  };
+
   const renderWishes = () => {
     const offset = currentPage * wishesPerPage;
-    const currentWishes = wishes.slice(offset, offset + wishesPerPage);
+    const currentWishes = filteredWishes.slice(offset, offset + wishesPerPage);
 
     return (
       <>
         {currentWishes.map((wish) => (
-          <div key={wish.id} className="wish-card">
-            <h3>{wish.title}</h3>
+          <div
+            key={wish.id}
+            className="wish-card"
+            onClick={() => openModal(wish)}
+          >
+            <h3>{wish.category}</h3>
             <p>{wish.description}</p>
             <p>
               <strong>Skills Required:</strong>{" "}
@@ -123,11 +203,13 @@ const Wishes = () => {
                 </p>
               </>
             )}
-            {wish.relevance && (
-              <p className="relevance">
-                <strong>Relevance:</strong> {wish.relevance}
-              </p>
-            )}
+            <p>
+              <strong>Participants:</strong>{" "}
+              {wish.participants ? wish.participants.length : 0}
+            </p>
+            <button onClick={() => handleRequestJoin(wish.id)}>
+              Request to Join
+            </button>
           </div>
         ))}
         <ReactPaginate
@@ -135,7 +217,7 @@ const Wishes = () => {
           nextLabel={"next"}
           breakLabel={"..."}
           breakClassName={"break-me"}
-          pageCount={Math.ceil(wishes.length / wishesPerPage)}
+          pageCount={Math.ceil(filteredWishes.length / wishesPerPage)}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
@@ -146,30 +228,8 @@ const Wishes = () => {
     );
   };
 
-  const handlePageClick = (data) => {
-    setCurrentPage(data.selected);
-  };
-
-  const handleShowRelevant = () => {
-    sessionStorage.removeItem("relevantWishes");
-    setLoading(true);
-    fetchUserHaves();
-  };
-const handleShowAll = async () => {
-  sessionStorage.removeItem("relevantWishes");
-  setLoading(true);
-  try {
-    const response = await axios.get("/wishes"); 
-    setWishes(response.data); 
-  } catch (error) {
-    console.error("Error fetching wishes:", error);
-  } finally {
-    setLoading(false);
-  }
-};
-
   return (
-    <div className="wishes-container">
+    <div className={`wishes-container ${modalIsOpen ? "blur" : ""}`}>
       {loading ? (
         <div className="loader-container">
           <ClipLoader color={"#123abc"} loading={loading} size={50} />
@@ -177,12 +237,19 @@ const handleShowAll = async () => {
       ) : (
         <>
           <h1>Wishes</h1>
+          <input
+            type="text"
+            placeholder="Search wishes..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-bar"
+          />
           {searching && (
             <p>
               Searching for relevant wishes. Till then, here are all the wishes:
             </p>
           )}
-          {wishes.length === 0 ? (
+          {filteredWishes.length === 0 ? (
             <p>No relevant wishes found. Showing all wishes:</p>
           ) : (
             renderWishes()
@@ -195,6 +262,45 @@ const handleShowAll = async () => {
               Show All Wishes
             </button>
           </div>
+          {selectedWish && (
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={closeModal}
+              className="modal-content"
+              overlayClassName="modal-overlay"
+              contentLabel="Wish Details"
+            >
+              <div className="modal-header">
+                <h2>Wish Details</h2>
+                <button onClick={closeModal}>&times;</button>
+              </div>
+              <div className="modal-body">
+                <p>{selectedWish.description}</p>
+                <b>Participants:</b>
+                {selectedWish.participants &&
+                selectedWish.participants.length > 0 ? (
+                  selectedWish.participants.map((participant) => (
+                    <div key={participant.user.id}>
+                      <p>
+                        <strong>{participant.user.name}</strong>
+                      </p>
+                      <p>
+                        Haves:{" "}
+                        {participant.user.haves &&
+                        participant.user.haves.length > 0
+                          ? participant.user.haves
+                              .map((have) => have.description)
+                              .join(", ")
+                          : "Not specified"}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p style={{ marginTop: "16px" }}>No participants yet.</p>
+                )}
+              </div>
+            </Modal>
+          )}
         </>
       )}
     </div>

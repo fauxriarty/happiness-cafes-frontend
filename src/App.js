@@ -10,6 +10,7 @@ import Profile from './components/Profile';
 import Terms from './components/Terms';
 import LandingPage from './components/LandingPage';
 import AdminPortal from './AdminPortal';
+import Community from './components/Community';
 import './CommonStyles.css';
 import './App.css';
 
@@ -53,6 +54,7 @@ function App() {
               <Route path="/terms" element={<Terms />} />
               <Route path="/" element={<Navigate to="/landing" />} />
               <Route path="/admin" element={<AdminPortal />} />
+              <Route path="/community" element={<Community />} />
               <Route path="*" element={<Navigate to="/landing" />} />
             </>
           )}
