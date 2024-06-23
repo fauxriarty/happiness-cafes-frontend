@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from '../axiosConfig'; 
 import { useNavigate } from "react-router-dom";
 import "./Form.css";
 import { FaArrowLeft } from "react-icons/fa";
@@ -129,7 +129,7 @@ const Registration = ({ Registration }) => {
     };
 
     try {
-      const response = await axios.post("http://localhost:8080/", dataToSubmit);
+      const response = await axios.post("/", dataToSubmit);
       alert("User registered successfully!");
       const { token, user: registeredUser } = response.data;
       sessionStorage.setItem("token", token);

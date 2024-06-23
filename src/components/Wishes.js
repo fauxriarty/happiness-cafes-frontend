@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import axios from '../axiosConfig'; 
 import "./Wishes.css";
 import ReactPaginate from "react-paginate";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -20,7 +20,7 @@ const Wishes = () => {
     }
     try {
       const response = await axios.get(
-        `http://localhost:8080/users/${userId}`,
+        `/users/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -37,7 +37,7 @@ const Wishes = () => {
 
   const fetchWishes = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:8080/wishes");
+      const response = await axios.get("/wishes");
       setWishes(response.data);
       setLoading(false);
     } catch (error) {
@@ -55,7 +55,7 @@ const Wishes = () => {
     try {
       setSearching(true); // Set searching to true when starting the search for relevant wishes
       const response = await axios.post(
-        `http://localhost:8080/wishes/relevant`,
+        `/wishes/relevant`,
         {
           userId,
           userHaves,
@@ -159,7 +159,7 @@ const handleShowAll = async () => {
   sessionStorage.removeItem("relevantWishes");
   setLoading(true);
   try {
-    const response = await axios.get("http://localhost:8080/wishes"); 
+    const response = await axios.get("/wishes"); 
     setWishes(response.data); 
   } catch (error) {
     console.error("Error fetching wishes:", error);

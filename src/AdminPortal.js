@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from './axiosConfig'; 
 import { useNavigate } from "react-router-dom";
 import "./AdminPortal.css";
 import { FaArrowLeft } from "react-icons/fa";
@@ -75,7 +75,7 @@ const AdminPortal = () => {
   const fetchUsersByCategoryAndState = async (category, state, description) => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/admin/geminiQueryByCategoryAndState",
+        "/admin/geminiQueryByCategoryAndState",
         { category, state, description }
       );
       setUsers(response.data);

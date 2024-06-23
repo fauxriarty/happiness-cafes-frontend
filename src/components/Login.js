@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../axiosConfig"; 
 import { useNavigate } from "react-router-dom";
 import "./Form.css";
 import { FaArrowLeft } from "react-icons/fa";
@@ -18,10 +18,7 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:8080/login",
-        credentials
-      );
+      const response = await axios.post("/login", credentials);
       alert("Login successful!");
       const { token, userId } = response.data;
       sessionStorage.setItem("token", token);
@@ -38,7 +35,7 @@ const Login = ({ onLogin }) => {
     <div className="form-container">
       <button
         className="back-button"
-        style={{ marginTop: "130px", marginLeft: "-905px" }}
+        style={{ marginTop: "120px", marginLeft: "-905px" }}
         onClick={() => navigate("/")}
       >
         <FaArrowLeft />

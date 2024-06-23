@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import "../CommonStyles.css";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import axios from '../axiosConfig'; 
+
 import ClipLoader from "react-spinners/ClipLoader";
 
 import "./Profile.css";
@@ -67,7 +68,7 @@ const Profile = () => {
     const fetchUserData = async () => {
       const token = sessionStorage.getItem("token");
       try {
-        const response = await axios.get(`http://localhost:8080/users/${userId}`, {
+        const response = await axios.get(`/users/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -93,7 +94,7 @@ const Profile = () => {
     if (newHave.category && newHave.description) {
       try {
         const response = await axios.put(
-          `http://localhost:8080/${userId}/haves`,
+          `/${userId}/haves`,
           newHave,
           {
             headers: {
@@ -117,7 +118,7 @@ const Profile = () => {
     if (newWish.category && newWish.description) {
       try {
         const response = await axios.put(
-          `http://localhost:8080/${userId}/wishes`,
+          `/${userId}/wishes`,
           newWish,
           {
             headers: {
@@ -162,7 +163,7 @@ const Profile = () => {
     const token = sessionStorage.getItem("token");
     try {
       const response = await axios.put(
-        `http://localhost:8080/${userId}/wishes/${wishId}/skills`,
+        `/${userId}/wishes/${wishId}/skills`,
         { skill, action },
         {
           headers: {
