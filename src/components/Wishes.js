@@ -52,7 +52,10 @@ const Wishes = () => {
       setLoading(false);
     }
   }, []);
-  
+
+  useEffect(() => {
+    fetchWishes(); 
+  }, [fetchWishes]);
 
   const fetchRelevantWishes = useCallback(async () => {
     const userId = sessionStorage.getItem("userId");
@@ -61,7 +64,7 @@ const Wishes = () => {
       return;
     }
     try {
-      setSearching(true); // Set searching to true when starting the search for relevant wishes
+      setSearching(true);
       const response = await axios.post(
         `/wishes/relevant`,
         {
@@ -76,7 +79,7 @@ const Wishes = () => {
       );
       setSearching(false);
       if (response.data.length === 0) {
-        fetchWishes(); // Fetch all wishes if no relevant wishes found
+        fetchWishes();
       } else {
         setWishes(response.data);
         setFilteredWishes(response.data);
@@ -85,10 +88,14 @@ const Wishes = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching relevant wishes:", error);
-      setSearching(false); // Set searching to false on error
+      setSearching(false);
       setLoading(false);
     }
   }, [userHaves, fetchWishes]);
+
+  useEffect(() => {
+    fetchUserHaves();
+  }, [fetchUserHaves]);
 
   useEffect(() => {
     const storedWishes = sessionStorage.getItem("relevantWishes");
@@ -97,17 +104,15 @@ const Wishes = () => {
       setFilteredWishes(JSON.parse(storedWishes));
       setLoading(false);
     } else {
-      fetchUserHaves();
+      fetchWishes();
     }
-  }, [fetchUserHaves]);
+  }, [fetchWishes]);
 
   useEffect(() => {
     if (userHaves.length > 0) {
       fetchRelevantWishes();
-    } else {
-      fetchWishes();
     }
-  }, [userHaves, fetchRelevantWishes, fetchWishes]);
+  }, [userHaves, fetchRelevantWishes]);
 
   useEffect(() => {
     const results = wishes.filter(
@@ -158,13 +163,7 @@ const Wishes = () => {
     console.log("Fetching all wishes...");
     sessionStorage.removeItem("relevantWishes");
     setLoading(true);
-    try {
-      await fetchWishes();
-    } catch (error) {
-      console.error("Error fetching all wishes:", error);
-    } finally {
-      setLoading(false);
-    }
+    await fetchWishes();
   };
 
   const openModal = (wish) => {
@@ -231,7 +230,7 @@ const Wishes = () => {
   };
 
   return (
-    <div className={`wishes-container ${modalIsOpen ? "blur" : ""}`}>
+    <div className="wishes-container">
       {loading ? (
         <div className="loader-container">
           <ClipLoader color={"#123abc"} loading={loading} size={50} />
@@ -274,7 +273,7 @@ const Wishes = () => {
             >
               <div className="modal-header">
                 <h2>Wish Details</h2>
-                <button onClick={closeModal}>&times;</button>
+                <button onClick={closeModal}>×</button>
               </div>
               <div className="modal-body">
                 <p>{selectedWish.description}</p>
