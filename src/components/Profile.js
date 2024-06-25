@@ -68,7 +68,7 @@ const Profile = () => {
     const fetchUserData = async () => {
       const token = sessionStorage.getItem("token");
       try {
-        const response = await axios.get(`/users/${userId}`, {
+        const response = await axios.get(`/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -112,7 +112,7 @@ const Profile = () => {
       }
     }
   };
-
+  
   const handleAddWish = async () => {
     const token = sessionStorage.getItem("token");
     if (newWish.category && newWish.description) {
@@ -136,9 +136,15 @@ const Profile = () => {
       }
     }
   };
-
+  
   const handleRemoveHave = async (haveId) => {
+    const token = sessionStorage.getItem("token");
     try {
+      await axios.delete(`/${userId}/haves/${haveId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setUserData((prevState) => ({
         ...prevState,
         haves: prevState.haves.filter((have) => have.id !== haveId),
@@ -147,9 +153,15 @@ const Profile = () => {
       console.error("Error removing have:", error);
     }
   };
-
+  
   const handleRemoveWish = async (wishId) => {
+    const token = sessionStorage.getItem("token");
     try {
+      await axios.delete(`/${userId}/wishes/${wishId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setUserData((prevState) => ({
         ...prevState,
         wishes: prevState.wishes.filter((wish) => wish.id !== wishId),
@@ -158,6 +170,7 @@ const Profile = () => {
       console.error("Error removing wish:", error);
     }
   };
+  
 
   const handleSkillUpdate = async (wishId, skill, action) => {
     const token = sessionStorage.getItem("token");

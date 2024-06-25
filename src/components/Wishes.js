@@ -26,7 +26,7 @@ const Wishes = () => {
       return;
     }
     try {
-      const response = await axios.get(`/users/${userId}`, {
+      const response = await axios.get(`/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -41,15 +41,18 @@ const Wishes = () => {
 
   const fetchWishes = useCallback(async () => {
     try {
+      console.log("Fetching all wishes...");
       const response = await axios.get("/wishes");
+      console.log("Fetched wishes:", response.data);
       setWishes(response.data);
       setFilteredWishes(response.data);
-      setLoading(false);
     } catch (error) {
-      console.error("Error fetching wishes:", error);
+      console.error("Error fetching wishes:", error.response ? error.response.data : error.message);
+    } finally {
       setLoading(false);
     }
   }, []);
+  
 
   const fetchRelevantWishes = useCallback(async () => {
     const userId = sessionStorage.getItem("userId");
@@ -71,7 +74,7 @@ const Wishes = () => {
           },
         }
       );
-      setSearching(false); // Set searching to false when search completes
+      setSearching(false);
       if (response.data.length === 0) {
         fetchWishes(); // Fetch all wishes if no relevant wishes found
       } else {
@@ -152,14 +155,13 @@ const Wishes = () => {
   };
 
   const handleShowAll = async () => {
+    console.log("Fetching all wishes...");
     sessionStorage.removeItem("relevantWishes");
     setLoading(true);
     try {
-      const response = await axios.get("/wishes");
-      setWishes(response.data);
-      setFilteredWishes(response.data);
+      await fetchWishes();
     } catch (error) {
-      console.error("Error fetching wishes:", error);
+      console.error("Error fetching all wishes:", error);
     } finally {
       setLoading(false);
     }

@@ -1,16 +1,38 @@
-body {
+body, html {
+  height: 100%;
+  margin: 0;
+  min-height: 300vh;
+  padding: 0;
   background: linear-gradient(0deg, #3E5151 0%, #DECBA4 100%);
+  background-attachment: fixed;
+}
+
+.page-wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .admin-container {
   max-width: 900px;
-  margin: 0 auto;
-  margin-top: 36px;
-  margin-bottom: 36px;
+  width: 100%;
   padding: 20px;
   background: #f9f9f9;
   border-radius: 10px;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  margin-top: 36px;
+  margin-bottom: 36px;
 }
 
 h2 {
@@ -53,32 +75,26 @@ h2 {
   padding: 10px 20px;
   background-color: #3E5151;
   color: white;
-  align-items: center;
-  margin-left: 320px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  justify-content: center;
+  display: block;
+  margin: 20px auto;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  padding: 15px;
 }
 
 .btn-submit:hover {
   background-color: #f7e9ce;
   color: black;
-  scale: 1.2;
   transition: 0.3s;
 }
 
 .user-list {
-  margin: 24px;
+  margin: 24px 0;
 }
 
 .user-list h3 {
   margin-bottom: 12px;
   color: #333;
-  margin-left: -2px;
 }
 
 .user-list ul {
@@ -104,8 +120,8 @@ h2 {
 
 .back-button {
   position: absolute;
-  top: 42px;
-  scale: 1;
+  top: 10px;
+  left: 120px;
   border: none;
   color: #333;
   font-size: 16px;

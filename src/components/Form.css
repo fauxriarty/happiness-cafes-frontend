@@ -22,9 +22,9 @@
 }
 
 .back-button {
-  position: relative;
-  margin-top: 40px;
-  margin-left: -890px;
+  position: absolute;
+  margin-top: 72px;
+  margin-left: 164px;
   background: none;
   border: none;
   color: white;
@@ -159,4 +159,13 @@ h3 {
   .btn-primary {
     padding: 10px 20px;
   }
+}
+
+
+.back-button-login {
+  position: absolute; 
+  background: none;
+  margin-bottom: 312px;
+  margin-left: -905px;
+  border: none;
 }

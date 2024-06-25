@@ -94,99 +94,102 @@ const AdminPortal = () => {
   };
 
   return (
-    <div className="admin-container">
-      <button
-        className="back-button"
-        style={{ marginLeft: "18px" }}
-        onClick={() => navigate("/")}
-      >
-        <FaArrowLeft />
-      </button>
-      <h2 style={{ marginTop: "18px" }}>HC Admin Portal</h2>
-      <form className="query-form" onSubmit={handleSubmit}>
-        <div className="form-group mt-3">
-          <label htmlFor="state">HC Location (State)</label>
-          <select
-            id="state"
-            name="state"
-            value={query.state}
-            onChange={handleQueryChange}
-            required
-          >
-            <option value="">Select State</option>
-            {states.map((state, i) => (
-              <option key={i} value={state}>
-                {state}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="category">Category</label>
-          <select
-            id="category"
-            name="category"
-            value={query.category}
-            onChange={handleQueryChange}
-            required
-          >
-            <option value="">Select Category</option>
-            {sdgs.map((sdg, i) => (
-              <option key={i} value={sdg}>
-                {sdg}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="description">Description</label>
-          <textarea
-            id="description"
-            name="description"
-            value={query.description}
-            onChange={handleQueryChange}
-            required
-          ></textarea>
-        </div>
-        <button type="submit" className="btn-submit">
-          Submit Query
+    <div className="page-wrapper">
+      <div className="page-container">
+        <button
+          className="back-button"
+          onClick={() => navigate("/")}
+        >
+          <FaArrowLeft />
         </button>
-      </form>
-      <div className="user-list">
-        <h3>Users in Selected Category</h3>
-        {users.length > 0 ? (
-          <ul>
-            {users.map((user, index) => (
-              <li key={index}>
-                <p>
-                  <strong>Name:</strong> {user.name}
-                </p>
-                <p>
-                  <strong>Phone:</strong> {user.phoneNumber}
-                </p>
-                <p>
-                  <strong>City:</strong> {user.city}
-                </p>
-                <p>
-                  <strong>State:</strong> {user.state}
-                </p>
-                <p>
-                  <strong>Pincode:</strong> {user.pincode}
-                </p>
-                <p>
-                  <strong>Reason:</strong> {user.reason}
-                </p>
-                {user.warning && (
-                  <p style={{ color: "red" }}>
-                    <strong>Warning:</strong> {user.warning}
-                  </p>
-                )}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No users found.</p>
-        )}
+        <div className="admin-container">
+          <h2>HC Admin Portal</h2>
+          <form className="query-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="state">HC Location (State)</label>
+              <select
+                id="state"
+                name="state"
+                value={query.state}
+                onChange={handleQueryChange}
+                required
+              >
+                <option value="">Select State</option>
+                {states.map((state, i) => (
+                  <option key={i} value={state}>
+                    {state}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="category">Category</label>
+              <select
+                id="category"
+                name="category"
+                value={query.category}
+                onChange={handleQueryChange}
+                required
+              >
+                <option value="">Select Category</option>
+                {sdgs.map((sdg, i) => (
+                  <option key={i} value={sdg}>
+                    {sdg}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                value={query.description}
+                onChange={handleQueryChange}
+                required
+              ></textarea>
+            </div>
+            <button type="submit" className="btn-submit">
+              Submit Query
+            </button>
+          </form>
+          <div className="user-list">
+            <h3>Users in Selected Category</h3>
+            {users.length > 0 ? (
+              <ul>
+                {users.map((user, index) => (
+                  <li key={index}>
+                    <p>
+                      <strong>Name:</strong> {user.name}
+                    </p>
+                    <p>
+                      <strong>Phone:</strong> {user.phoneNumber}
+                    </p>
+                    <p>
+                      <strong>City:</strong> {user.city}
+                    </p>
+                    <p>
+                      <strong>State:</strong> {user.state}
+                    </p>
+                    <p>
+                      <strong>Pincode:</strong> {user.pincode}
+                    </p>
+                    <p>
+                      <strong>Reason:</strong> {user.reason}
+                    </p>
+                    {user.warning && (
+                      <p style={{ color: "red" }}>
+                        <strong>Warning:</strong> {user.warning}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No users found.</p>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

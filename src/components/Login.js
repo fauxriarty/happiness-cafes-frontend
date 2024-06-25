@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "../axiosConfig"; 
+import axios from "../axiosConfig";
 import { useNavigate } from "react-router-dom";
 import "./Form.css";
 import { FaArrowLeft } from "react-icons/fa";
@@ -32,10 +32,9 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="form-container">
+    <div class="form-container login-form-container">
       <button
-        className="back-button"
-        style={{ marginTop: "120px", marginLeft: "-905px" }}
+        className="back-button-login"
         onClick={() => navigate("/")}
       >
         <FaArrowLeft />
