@@ -87,6 +87,7 @@ body, html {
 .request-card button:hover {
   background-color: #b5a06a;
 }
+
 .modal-content {
   background: white;
   padding: 20px;
@@ -134,13 +135,11 @@ body, html {
   justify-content: center;
 }
 
-@keyframes slideDown {
-  from {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.participant-card {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #333;
 }

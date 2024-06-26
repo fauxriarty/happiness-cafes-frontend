@@ -26,7 +26,7 @@ const Wishes = () => {
       return;
     }
     try {
-      const response = await axios.get(`/${userId}`, {
+      const response = await axios.get(`/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

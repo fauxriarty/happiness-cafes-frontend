@@ -60,6 +60,24 @@ const Community = () => {
     }
   };
 
+  const handleInviteResponse = async (inviteId, status) => {
+    const token = sessionStorage.getItem("token");
+    try {
+      await axios.post(
+        `/wishes/invites/${inviteId}/respond`,
+        { status },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      );
+      fetchRequests(); 
+    } catch (error) {
+      console.error("Error responding to invite:", error);
+    }
+  };
+
   const openModal = (wish) => {
     setSelectedWish(wish);
     setModalIsOpen(true);
@@ -85,19 +103,39 @@ const Community = () => {
             wishes.map((wish) => (
               <div key={wish.id} className="wish-card" onClick={() => openModal(wish)}>
                 <h3>{wish.description}</h3>
-                <p>Participants: {wish.participants.length}</p>
-                {wish.requests.map((request) => (
-                  <div key={request.id} className="request-card">
-                    <p><strong>Requested by:</strong> {request.user.name}</p>
-                    <p><strong>Status:</strong> {request.status}</p>
-                    {request.status === 'pending' && (
-                      <>
-                        <button onClick={() => handleResponse(request.id, 'accepted')}>Accept</button>
-                        <button onClick={() => handleResponse(request.id, 'rejected')}>Reject</button>
-                      </>
-                    )}
-                  </div>
-                ))}
+                <p>Participants: {wish.participants ? wish.participants.length : 0}</p>
+                {wish.requests && wish.requests.length > 0 ? (
+                  wish.requests.map((request) => (
+                    <div key={request.id} className="request-card">
+                      <p><strong>Requested by:</strong> {request.user ? request.user.name : "Unknown"}</p>
+                      <p><strong>Status:</strong> {request.status}</p>
+                      {request.status === 'pending' && (
+                        <>
+                          <button onClick={() => handleResponse(request.id, 'accepted')}>Accept</button>
+                          <button onClick={() => handleResponse(request.id, 'rejected')}>Reject</button>
+                        </>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p>No requests available for this wish.</p>
+                )}
+                {wish.invites && wish.invites.length > 0 ? (
+                  wish.invites.map((invite) => (
+                    <div key={invite.id} className="invite-card">
+                      <p><strong>Invited by:</strong> {invite.user ? invite.user.name : "Unknown"}</p>
+                      <p><strong>Status:</strong> {invite.status}</p>
+                      {invite.status === 'pending' && (
+                        <>
+                          <button onClick={() => handleInviteResponse(invite.id, 'accepted')}>Accept</button>
+                          <button onClick={() => handleInviteResponse(invite.id, 'rejected')}>Reject</button>
+                        </>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p>No invites available for this wish.</p>
+                )}
               </div>
             ))
           )}
@@ -118,9 +156,10 @@ const Community = () => {
                 <b>Participants:</b>
                 {selectedWish.participants && selectedWish.participants.length > 0 ? (
                   selectedWish.participants.map((participant) => (
-                    <div key={participant.user.id}>
+                    <div key={participant.user.id} className="participant-card">
                       <p><strong>{participant.user.name}</strong></p>
-                      <p>Haves: {participant.user.haves.map(have => have.description).join(", ")}</p>
+                      <p>Haves: {participant.user.haves ? participant.user.haves.map(have => have.description).join(", ") : "None"}</p>
+                      <p>Contact: {participant.user.phoneNumber}</p>
                     </div>
                   ))
                 ) : (

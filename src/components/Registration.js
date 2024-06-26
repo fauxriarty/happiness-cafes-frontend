@@ -129,7 +129,7 @@ const Registration = ({ Registration }) => {
     };
 
     try {
-      const response = await axios.post("/", dataToSubmit);
+      const response = await axios.post("/users/", dataToSubmit);
       alert("User registered successfully!");
       const { token, user: registeredUser } = response.data;
       sessionStorage.setItem("token", token);

@@ -68,7 +68,7 @@ const Profile = () => {
     const fetchUserData = async () => {
       const token = sessionStorage.getItem("token");
       try {
-        const response = await axios.get(`/${userId}`, {
+        const response = await axios.get(`/users/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -94,7 +94,7 @@ const Profile = () => {
     if (newHave.category && newHave.description) {
       try {
         const response = await axios.put(
-          `/${userId}/haves`,
+          `/users/${userId}/haves`,
           newHave,
           {
             headers: {
@@ -118,7 +118,7 @@ const Profile = () => {
     if (newWish.category && newWish.description) {
       try {
         const response = await axios.put(
-          `/${userId}/wishes`,
+          `/users/${userId}/wishes`,
           newWish,
           {
             headers: {
@@ -140,7 +140,7 @@ const Profile = () => {
   const handleRemoveHave = async (haveId) => {
     const token = sessionStorage.getItem("token");
     try {
-      await axios.delete(`/${userId}/haves/${haveId}`, {
+      await axios.delete(`/users/${userId}/haves/${haveId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -157,7 +157,7 @@ const Profile = () => {
   const handleRemoveWish = async (wishId) => {
     const token = sessionStorage.getItem("token");
     try {
-      await axios.delete(`/${userId}/wishes/${wishId}`, {
+      await axios.delete(`/users/${userId}/wishes/${wishId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -176,7 +176,7 @@ const Profile = () => {
     const token = sessionStorage.getItem("token");
     try {
       const response = await axios.put(
-        `/${userId}/wishes/${wishId}/skills`,
+        `/users/${userId}/wishes/${wishId}/skills`,
         { skill, action },
         {
           headers: {

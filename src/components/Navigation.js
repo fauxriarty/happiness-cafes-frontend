@@ -25,6 +25,11 @@ const Navigation = ({ isAuthenticated, onLogout }) => {
                 <li className="nav-item">
                   <Link className="nav-link" to="/wishes">Wishes</Link>
                 </li>
+
+                <li className="nav-item">
+                  <Link className="nav-link" to="/haves">Haves</Link>
+                </li>
+
                 <li className="nav-item">
                   <Link className="nav-link" to="/community">Community</Link>
                 </li>

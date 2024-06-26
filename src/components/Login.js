@@ -18,7 +18,7 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/login", credentials);
+      const response = await axios.post("/users/login", credentials);
       alert("Login successful!");
       const { token, userId } = response.data;
       sessionStorage.setItem("token", token);
