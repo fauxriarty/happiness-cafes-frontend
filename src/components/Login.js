@@ -32,7 +32,9 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div class="form-container login-form-container">
+    <div className="page-wrapper">
+      <div className="page-container">
+    <div class="form-container mt-4">
       <button
         className="back-button-login"
         onClick={() => navigate("/")}
@@ -83,6 +85,9 @@ const Login = ({ onLogin }) => {
         </form>
       </div>
     </div>
+    </div>
+    </div>
+
   );
 };
 

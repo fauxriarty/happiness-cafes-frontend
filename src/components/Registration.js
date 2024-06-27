@@ -146,10 +146,14 @@ const Registration = ({ Registration }) => {
   };
 
   return (
-    <div className="form-container">
-      <button className="back-button" onClick={() => navigate("/")}>
+    <div className="page-wrapper">
+      <div className="page-container">
+
+      <button className="back-button-reg" onClick={() => navigate("/")}>
         <FaArrowLeft />
       </button>
+    <div className="form-container">
+      
       <div className="form-box">
         <h2 style={{ margin: "15px" }}>New to the Family?</h2>
         <form onSubmit={handleSubmit}>
@@ -339,7 +343,7 @@ const Registration = ({ Registration }) => {
                 />
               </div>
               <div className="form-group">
-                <label className="form-label">Skills Required</label>
+                <label className="form-label">Skills Required for the Wish above:</label>
                 {wish.skills.map((skill, skillIndex) => (
                   <input
                     key={skillIndex}
@@ -355,6 +359,7 @@ const Registration = ({ Registration }) => {
                 ))}
                 <button
                   type="button"
+                  style={{ marginLeft: "-800px" }}
                   className="btn btn-secondary"
                   onClick={() => addWishSkill(index)}
                 >
@@ -363,15 +368,18 @@ const Registration = ({ Registration }) => {
               </div>
             </div>
           ))}
-          <button type="button" className="btn btn-secondary" onClick={addWish}>
+          <button style={{ margin: "18px" }} type="button" className="btn btn-secondary" onClick={addWish}>
             Add Another Wish
           </button>
-          <button type="submit" className="btn btn-primary">
+          <button  style={{ margin: "18px" }} type="submit" className="btn btn-primary">
             Submit
           </button>
         </form>
       </div>
     </div>
+    </div>
+    </div>
+
   );
 };
 

@@ -53,10 +53,6 @@ const Wishes = () => {
     }
   }, []);
 
-  useEffect(() => {
-    fetchWishes(); 
-  }, [fetchWishes]);
-
   const fetchRelevantWishes = useCallback(async () => {
     const userId = sessionStorage.getItem("userId");
     const token = sessionStorage.getItem("token");
@@ -109,12 +105,6 @@ const Wishes = () => {
   }, [fetchWishes]);
 
   useEffect(() => {
-    if (userHaves.length > 0) {
-      fetchRelevantWishes();
-    }
-  }, [userHaves, fetchRelevantWishes]);
-
-  useEffect(() => {
     const results = wishes.filter(
       (wish) =>
         wish.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -156,7 +146,7 @@ const Wishes = () => {
   const handleShowRelevant = () => {
     sessionStorage.removeItem("relevantWishes");
     setLoading(true);
-    fetchUserHaves();
+    fetchRelevantWishes();
   };
 
   const handleShowAll = async () => {

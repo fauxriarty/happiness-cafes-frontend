@@ -1,9 +1,35 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  min-height: 300vh;
+  padding: 0;
+  background: linear-gradient(0deg, #3E5151 0%, #DECBA4 100%);
+  background-attachment: fixed;
+}
+
+.page-wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
 .form-container {
-  min-height: 100vh;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(0deg,  #3E5151 0%, #DECBA4 100%);
+  background: none;
   color: white;
   padding: 20px;
   box-sizing: border-box;
@@ -21,14 +47,14 @@
   margin: 20px;
 }
 
-.back-button {
-  position: absolute;
-  margin-top: 72px;
-  margin-left: 164px;
+.back-button-reg {
+  position: relative;
+  top: 108px;
+  left: -444px;
   background: none;
   border: none;
-  color: white;
-  font-size: 24px;
+  color: black;
+  font-size: 18px;
   cursor: pointer;
 }
 

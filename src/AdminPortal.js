@@ -97,7 +97,7 @@ const AdminPortal = () => {
     <div className="page-wrapper">
       <div className="page-container">
         <button
-          className="back-button"
+          className="back-button-admin"
           onClick={() => navigate("/")}
         >
           <FaArrowLeft />

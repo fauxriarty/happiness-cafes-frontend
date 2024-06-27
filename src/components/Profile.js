@@ -227,6 +227,8 @@ const Profile = () => {
   }
 
   return (
+    <div className="page-wrapper">
+      <div className="page-container">
     <div className="common-container profile-page">
       <div className="profile-section">
         <h1>Your Profile</h1>
@@ -397,6 +399,9 @@ const Profile = () => {
         </div>
       </div>
     </div>
+    </div>
+    </div>
+    
   );
 };
 
