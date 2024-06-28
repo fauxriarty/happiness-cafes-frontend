@@ -27,7 +27,7 @@ const Haves = () => {
       return;
     }
     try {
-      const response = await axios.get(`http://localhost:8080/users/${userId}/wishes`, {
+      const response = await axios.get(`/users/${userId}/wishes`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -40,7 +40,7 @@ const Haves = () => {
 
   const fetchHaves = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:8080/haves");
+      const response = await axios.get("/haves");
       setHaves(response.data);
       setFilteredHaves(response.data);
       sessionStorage.setItem("allHaves", JSON.stringify(response.data));
@@ -72,7 +72,7 @@ const Haves = () => {
     try {
       setSearching(true);
       const response = await axios.post(
-        `http://localhost:8080/haves/relevant`,
+        `/haves/relevant`,
         { userWishes },
         {
           headers: {
@@ -199,7 +199,7 @@ const Haves = () => {
     const senderId = sessionStorage.getItem("userId");  
     try {
       await axios.post(
-        `http://localhost:8080/wishes/${wishId}/invite`,
+        `/wishes/${wishId}/invite`,
         { userId, senderId },
         {
           headers: {

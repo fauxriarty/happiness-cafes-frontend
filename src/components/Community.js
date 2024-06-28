@@ -22,7 +22,7 @@ const Community = () => {
     }
     try {
       const response = await axios.get(
-        `http://localhost:8080/wishes/requests`,
+        `/wishes/requests`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -48,7 +48,7 @@ const Community = () => {
     }
     try {
       const response = await axios.get(
-        `http://localhost:8080/wishes/invites`,
+        `/wishes/invites`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -74,7 +74,7 @@ const Community = () => {
     }
     try {
       const response = await axios.get(
-        `http://localhost:8080/wishes/active`,
+        `/wishes/active`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -102,7 +102,7 @@ const Community = () => {
     const token = sessionStorage.getItem("token");
     try {
       await axios.post(
-        `http://localhost:8080/wishes/requests/${requestId}/respond`,
+        `/wishes/requests/${requestId}/respond`,
         { status },
         {
           headers: {
@@ -120,7 +120,7 @@ const Community = () => {
     const token = sessionStorage.getItem("token");
     try {
       await axios.post(
-        `http://localhost:8080/wishes/invites/${inviteId}/respond`,
+        `/wishes/invites/${inviteId}/respond`,
         { status },
         {
           headers: {
