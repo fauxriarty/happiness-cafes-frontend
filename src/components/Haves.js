@@ -196,10 +196,11 @@ const Haves = () => {
 
   const sendInvite = async (userId, wishId) => {
     const token = sessionStorage.getItem("token");
+    const senderId = sessionStorage.getItem("userId");  
     try {
       await axios.post(
         `http://localhost:8080/wishes/${wishId}/invite`,
-        { userId },
+        { userId, senderId },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -212,6 +213,7 @@ const Haves = () => {
       alert("Failed to send invite");
     }
   };
+  
 
   const handleInviteSubmit = (e) => {
     e.preventDefault();

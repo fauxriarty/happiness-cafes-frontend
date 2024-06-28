@@ -8,6 +8,8 @@ Modal.setAppElement('#root');
 
 const Community = () => {
   const [wishes, setWishes] = useState([]);
+  const [invites, setInvites] = useState([]);
+  const [activeWishes, setActiveWishes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedWish, setSelectedWish] = useState(null);
@@ -20,7 +22,7 @@ const Community = () => {
     }
     try {
       const response = await axios.get(
-        `/wishes/requests`,
+        `http://localhost:8080/wishes/requests`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -38,15 +40,69 @@ const Community = () => {
     }
   }, []);
 
+  const fetchInvites = useCallback(async () => {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) {
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/wishes/invites`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            userId
+          }
+        }
+      );
+      setInvites(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching invites:", error);
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchActiveWishes = useCallback(async () => {
+    const userId = sessionStorage.getItem("userId");
+    const token = sessionStorage.getItem("token");
+    if (!userId || !token) {
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/wishes/active`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            userId
+          }
+        }
+      );
+      setActiveWishes(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching active wishes:", error);
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     fetchRequests();
-  }, [fetchRequests]);
+    fetchInvites();
+    fetchActiveWishes();
+  }, [fetchRequests, fetchInvites, fetchActiveWishes]);
 
   const handleResponse = async (requestId, status) => {
     const token = sessionStorage.getItem("token");
     try {
       await axios.post(
-        `/wishes/requests/${requestId}/respond`,
+        `http://localhost:8080/wishes/requests/${requestId}/respond`,
         { status },
         {
           headers: {
@@ -54,7 +110,7 @@ const Community = () => {
           }
         }
       );
-      fetchRequests(); 
+      fetchRequests();
     } catch (error) {
       console.error("Error responding to request:", error);
     }
@@ -64,7 +120,7 @@ const Community = () => {
     const token = sessionStorage.getItem("token");
     try {
       await axios.post(
-        `/wishes/invites/${inviteId}/respond`,
+        `http://localhost:8080/wishes/invites/${inviteId}/respond`,
         { status },
         {
           headers: {
@@ -72,7 +128,8 @@ const Community = () => {
           }
         }
       );
-      fetchRequests(); 
+      fetchInvites();
+      fetchActiveWishes();
     } catch (error) {
       console.error("Error responding to invite:", error);
     }
@@ -96,46 +153,61 @@ const Community = () => {
         </div>
       ) : (
         <>
-          <h1>Community Requests</h1>
+          <h1 style={{margin:'16px'}}>Community Requests</h1>
           {wishes.length === 0 ? (
             <p>No requests found.</p>
           ) : (
             wishes.map((wish) => (
-              <div key={wish.id} className="wish-card" onClick={() => openModal(wish)}>
+              <div key={wish.id} className="card mt-4" onClick={() => openModal(wish)}>
                 <h3>{wish.description}</h3>
                 <p>Participants: {wish.participants ? wish.participants.length : 0}</p>
+
                 {wish.requests && wish.requests.length > 0 ? (
                   wish.requests.map((request) => (
                     <div key={request.id} className="request-card">
                       <p><strong>Requested by:</strong> {request.user ? request.user.name : "Unknown"}</p>
-                      <p><strong>Status:</strong> {request.status}</p>
-                      {request.status === 'pending' && (
+                      {request.status === 'pending' ? (
                         <>
                           <button onClick={() => handleResponse(request.id, 'accepted')}>Accept</button>
                           <button onClick={() => handleResponse(request.id, 'rejected')}>Reject</button>
                         </>
+                      ) : (
+                        <p><strong>Status:</strong> {request.status}</p>
                       )}
                     </div>
                   ))
                 ) : (
                   <p>No requests available for this wish.</p>
                 )}
-                {wish.invites && wish.invites.length > 0 ? (
-                  wish.invites.map((invite) => (
-                    <div key={invite.id} className="invite-card">
-                      <p><strong>Invited by:</strong> {invite.user ? invite.user.name : "Unknown"}</p>
-                      <p><strong>Status:</strong> {invite.status}</p>
-                      {invite.status === 'pending' && (
-                        <>
-                          <button onClick={() => handleInviteResponse(invite.id, 'accepted')}>Accept</button>
-                          <button onClick={() => handleInviteResponse(invite.id, 'rejected')}>Reject</button>
-                        </>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <p>No invites available for this wish.</p>
+              </div>
+            ))
+          )}
+          <h1 className="mt-5"style={{margin:'16px'}}>Invites</h1>
+          {invites.length === 0 ? (
+            <p style={{margin:'16px'}}>No invites found.</p>
+          ) : (
+            invites.map((invite) => (
+              <div key={invite.id} className="card mt-4" onClick={() => openModal(invite.wish)}>
+                <h3>{invite.wish.description}</h3>
+                <p>Invited by: {invite.sender ? invite.sender.name : "Unknown"}</p>
+                {invite.status === 'pending' && (
+                  <>
+                    <button onClick={() => handleInviteResponse(invite.id, 'accepted')}>Accept</button>
+                    <button onClick={() => handleInviteResponse(invite.id, 'rejected')}>Reject</button>
+                  </>
                 )}
+              </div>
+            ))
+          )}
+          <h1 className="mt-5" style={{margin:'16px'}}>Active Wishes</h1>
+          {activeWishes.length === 0 ? (
+            <p>No active wishes found.</p>
+          ) : (
+            activeWishes.map((wish) => (
+              <div key={wish.id} className="card mt-4" onClick={() => openModal(wish)}>
+                <h3>{wish.description}</h3>
+                <p>Created by: {wish.user ? wish.user.name : "Unknown"}</p>
+                <p>Participants: {wish.participants ? wish.participants.length : 0}</p>
               </div>
             ))
           )}
@@ -158,7 +230,6 @@ const Community = () => {
                   selectedWish.participants.map((participant) => (
                     <div key={participant.user.id} className="participant-card">
                       <p><strong>{participant.user.name}</strong></p>
-                      <p>Haves: {participant.user.haves ? participant.user.haves.map(have => have.description).join(", ") : "None"}</p>
                       <p>Contact: {participant.user.phoneNumber}</p>
                     </div>
                   ))
