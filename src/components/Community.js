@@ -201,7 +201,7 @@ const Community = () => {
           )}
           <h1 className="mt-5" style={{margin:'16px'}}>Active Wishes</h1>
           {activeWishes.length === 0 ? (
-            <p>No active wishes found.</p>
+            <p style={{margin:'16px'}}>No active wishes found.</p>
           ) : (
             activeWishes.map((wish) => (
               <div key={wish.id} className="card mt-4" onClick={() => openModal(wish)}>
