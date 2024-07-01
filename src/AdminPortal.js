@@ -75,7 +75,7 @@ const AdminPortal = () => {
   const fetchUsersByCategoryAndState = async (category, state, description) => {
     try {
       const response = await axios.post(
-        "/admin/geminiQueryByCategoryAndState",
+        "/queryByCategoryAndState",
         { category, state, description }
       );
       setUsers(response.data);
